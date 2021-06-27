@@ -1,7 +1,8 @@
+import Language, { LanguageHandler } from "./Language";
+
 import Client from "./Client";
 import Guild from "./Guild";
 import { GuildMember } from "discord.js";
-import Language from "./Language";
 import Message from "./Message";
 import User from "./User";
 
@@ -12,5 +13,6 @@ export {
 	User,
 	GuildMember,
 	Client as PotatoClient,
-	Client
+	Client,
+	LanguageHandler
 };

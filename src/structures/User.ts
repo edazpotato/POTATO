@@ -20,8 +20,10 @@ export default class User extends DiscordUser {
 	get language(): Language {
 		// @ts-ignore
 		return (
-			this.client.languages.get(this.languageID) ||
-			this.client.languages.get(this.client.defaultLanguageID)
+			this.client.languageHandler.modules.get(this.languageID) ||
+			(this.client.languageHandler.modules.get(
+				this.client.defaultLanguageID
+			) as Language)
 		);
 	}
 

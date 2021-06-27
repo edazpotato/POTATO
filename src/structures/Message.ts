@@ -29,13 +29,33 @@ export default class Message extends DiscordMessage {
 		return (
 			this.guild?.language ||
 			this.author?.language ||
-			this.client.languages.get(this.client.defaultLanguageID)
+			(this.client.languageHandler.modules.get(
+				this.client.defaultLanguageID
+			) as Language)
 		);
 	}
 
 	send(key: string = "", ...args: any[]) {
 		return this.channel.send({
-			content: this.language.getString(key)
+			content: this.language.getString(key, ...args)
+		});
+	}
+
+	async error(key: string = "", ...args: any[]) {
+		return this.channel.send({
+			content: this.language.getString(
+				"ERROR_MESSAGE",
+				this.language.getString(key, ...args)
+			)
+		});
+	}
+
+	async success(key: string = "", ...args: any[]) {
+		return this.channel.send({
+			content: this.language.getString(
+				"SUCCSESS_MESSAGE",
+				this.language.getString(key, ...args)
+			)
 		});
 	}
 }

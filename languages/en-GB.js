@@ -1,5 +1,0 @@
-module.exports = {
-	COMMAND_PING_EMBED_TITLE: "Pong!",
-	COMMAND_PING_EMBED_FIELD_RTT_TITLE: "Round trip time",
-	COMMAND_PING_EMBED_FIELD_HEARTBEAT_TITLE: "Heartbeat"
-};
