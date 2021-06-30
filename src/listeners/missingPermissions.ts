@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Client, Message } from "../structures";
 import { Command, Listener } from "discord-akairo";
 import { MessageEmbed, PermissionString } from "discord.js";
@@ -6,14 +5,6 @@ import { MessageEmbed, PermissionString } from "discord.js";
 export default class MissingPermissionsListener extends Listener {
 	declare client: Client;
 
-=======
-import { Command, Listener } from "discord-akairo";
-
-import { Message } from "../structures";
-import { PermissionString } from "discord.js";
-
-export default class MissingPermissionsListener extends Listener {
->>>>>>> f7243c81316a9794fdf02af0bc5de2b7f9a3be78
 	constructor() {
 		super("missingPermissions", {
 			emitter: "commandHandler",
@@ -27,7 +18,6 @@ export default class MissingPermissionsListener extends Listener {
 		type: "client" | "user",
 		missingPermissions: PermissionString[]
 	) {
-<<<<<<< HEAD
 		let cleanPermissions = [];
 		for (const permission of missingPermissions) {
 			cleanPermissions.push(
@@ -44,9 +34,5 @@ export default class MissingPermissionsListener extends Listener {
 				cleanPermissions
 			)
 			.catch(() => {});
-=======
-		console.log(missingPermissions);
-		const cleanPermissions = message.language.getString("PERMISSIONS");
->>>>>>> f7243c81316a9794fdf02af0bc5de2b7f9a3be78
 	}
 }
