@@ -4,7 +4,11 @@
 
 > ^ The badge is lying it's not online
 
+<<<<<<< HEAD
 -   Add to your Discord server with this link: [https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537152512&scope=applications.commands%20bot](https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537152512&scope=applications.commands%20bot)
+=======
+-   Add to your Discord server with this link: [https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537135104&scope=bot%20applications.commands](https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537135104&scope=bot%20applications.commands)
+>>>>>>> f7243c81316a9794fdf02af0bc5de2b7f9a3be78
 -   Vote on [top.gg](https://top.gg/bot/608921626548895755/vote)
 
 ## Project status
