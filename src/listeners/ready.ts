@@ -16,7 +16,7 @@ export default class ReadyListener extends Listener {
 	exec() {
 		this.client.user.setActivity({
 			type: "WATCHING",
-			name: `for @POTATO help${
+			name: `for @${this.client.user.username} help${
 				this.client.shard?.ids[0]
 					? ` | ${this.client.shard?.ids[0]}/${this.client.shard.count}`
 					: ""
