@@ -35,7 +35,6 @@
 		"discord.js": "^13.0.0-dev.a08ce7d.1625097834",
 		"dotenv-extended": "^2.9.0",
 		"erlpack": "github:discord/erlpack",
-		"nodegit": "^0.27.0",
 		"sqlite": "^4.0.23",
 		"sqlite3": "^5.0.2",
 		"statcord.js": "github:kaname-png/statcord.js#discordjs-v13-sharding-compatibility",
@@ -44,7 +43,6 @@
 		"zlib-sync": "^0.1.7"
 	},
 	"devDependencies": {
-		"@types/node": "^15.12.4",
-		"@types/nodegit": "^0.27.2"
+		"@types/node": "^15.12.4"
 	}
 }
