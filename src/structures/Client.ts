@@ -15,6 +15,7 @@ import { Language, LanguageHandler, User } from ".";
 
 import { Intents } from "discord.js";
 import { LanguageID } from "../types";
+import Statcord from "statcord.js";
 import { Api as TopggAPI } from "@top-gg/sdk";
 import sqlite3 from "sqlite3";
 

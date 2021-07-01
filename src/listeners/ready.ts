@@ -30,7 +30,11 @@ export default class ReadyListener extends Listener {
 		);
 		this.client.postTopggStats();
 
-		console.log(`[shard ${this.client.shard?.ids[0]}] I'm ready!`);
+		console.log(
+			`[${new Date().toLocaleString()} | shard ${
+				this.client.shard?.ids[0]
+			}] I'm ready!`
+		);
 
 		!this.client.production &&
 			console.log(

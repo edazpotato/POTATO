@@ -37,6 +37,7 @@
 		"erlpack": "github:discord/erlpack",
 		"sqlite": "^4.0.23",
 		"sqlite3": "^5.0.2",
+		"statcord.js": "github:kaname-png/statcord.js#discordjs-v13-sharding-compatibility",
 		"typescript": "^4.3.4",
 		"utf-8-validate": "^5.0.5",
 		"zlib-sync": "^0.1.7"

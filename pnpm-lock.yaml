@@ -11,6 +11,7 @@ specifiers:
   erlpack: github:discord/erlpack
   sqlite: ^4.0.23
   sqlite3: ^5.0.2
+  statcord.js: github:kaname-png/statcord.js#discordjs-v13-sharding-compatibility
   typescript: ^4.3.4
   utf-8-validate: ^5.0.5
   zlib-sync: ^0.1.7
@@ -25,6 +26,7 @@ dependencies:
   erlpack: github.com/discord/erlpack/e27db8f82892bdb9b28a0547cc394d68b5d2242d
   sqlite: 4.0.23
   sqlite3: 5.0.2
+  statcord.js: github.com/kaname-png/statcord.js/b9b27895916eddf474668f536b0b0e2659cb3ba1
   typescript: 4.3.4
   utf-8-validate: 5.0.5
   zlib-sync: 0.1.7
@@ -985,6 +987,13 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /systeminformation/5.7.7:
+    resolution: {integrity: sha512-aQ7MBeVI2MKPYOi3YJAoZ45JVlRkBA7IXoqGgtVBamvtE0I6JLOyJzD/VVc9pnMXDb3yqaMwssAjhwtJax4/Rw==}
+    engines: {node: '>=4.0.0'}
+    os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos]
+    hasBin: true
+    dev: false
+
   /tar/2.2.2:
     resolution: {integrity: sha512-FCEhQ/4rE1zYv9rYXJw/msRqsnmlje5jHP6huWeBZ704jUTy02c5AZyWujpMR1ax6mVw9NyJMfuK2CMDWVIfgA==}
     dependencies:
@@ -1156,4 +1165,13 @@ packages:
     dependencies:
       bindings: 1.5.0
       nan: 2.14.2
+    dev: false
+
+  github.com/kaname-png/statcord.js/b9b27895916eddf474668f536b0b0e2659cb3ba1:
+    resolution: {tarball: https://codeload.github.com/kaname-png/statcord.js/tar.gz/b9b27895916eddf474668f536b0b0e2659cb3ba1}
+    name: statcord.js
+    version: 3.2.0
+    dependencies:
+      node-fetch: 2.6.1
+      systeminformation: 5.7.7
     dev: false
