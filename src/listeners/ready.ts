@@ -24,6 +24,12 @@ export default class ReadyListener extends Listener {
 			shardID: this.client.shard?.ids[0] || undefined,
 		});
 
+		setTimeout(
+			this.client.postTopggStats,
+			100 * 60 * 30 // 30 minutes
+		);
+		this.client.postTopggStats();
+
 		console.log(`[shard ${this.client.shard?.ids[0]}] I'm ready!`);
 
 		!this.client.production &&

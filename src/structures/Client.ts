@@ -136,10 +136,19 @@ export default class Client extends AkairoClient {
 				shardId: this.shard?.ids[0] || undefined,
 				shardCount: this.options.shardCount,
 			})
-			.then(() => true)
+			.then(() => {
+				console.info(
+					`[${new Date().toLocaleString()} | shard ${
+						this.shard?.ids[0]
+					}] Posted stats to top.gg`
+				);
+				return true;
+			})
 			.catch((err) => {
 				console.warn(
-					`[${new Date().toLocaleString()}] Error posting Top.gg stats:\n${err}`
+					`[${new Date().toLocaleString()} | shard ${
+						this.shard?.ids[0]
+					}] Error posting Top.gg stats:\n${err}`
 				);
 				return false;
 			});
