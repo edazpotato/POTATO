@@ -5,11 +5,11 @@ import {
 	CommandHandler,
 	InhibitorHandler,
 	ListenerHandler,
-	SQLiteProvider
+	SQLiteProvider,
 } from "discord-akairo";
 import {
 	ClientOptions as DiscordClientOptions,
-	ClientUser as DiscordClientUser
+	ClientUser as DiscordClientUser,
 } from "discord.js";
 import { Language, LanguageHandler, User } from ".";
 
@@ -23,8 +23,8 @@ const discordOptions: DiscordClientOptions = {
 	shards: "auto",
 	presence: {
 		status: "online",
-		activities: [{ type: "WATCHING", name: "you" }]
-	}
+		activities: [{ type: "WATCHING", name: "for @POTATO help" }],
+	},
 };
 
 export default class Client extends AkairoClient {
@@ -72,33 +72,33 @@ export default class Client extends AkairoClient {
 			commandUtilLifetime: 10000,
 			commandUtilSweepInterval: 10000,
 			storeMessages: true,
-			handleEdits: true
+			handleEdits: true,
 		});
 
 		this.inhibitorHandler = new InhibitorHandler(this, {
-			directory: "./dist/inhibitors/"
+			directory: "./dist/inhibitors/",
 		});
 
 		this.listenerHandler = new ListenerHandler(this, {
-			directory: "./dist/listeners/"
+			directory: "./dist/listeners/",
 		});
 
 		this.languageHandler = new LanguageHandler(this, {
-			directory: "./dist/languages/"
+			directory: "./dist/languages/",
 		});
 
 		const db = sqlite.open({
 			filename: "./db.sqlite",
-			driver: sqlite3.Database
+			driver: sqlite3.Database,
 		});
 
 		this.settings = {
 			guilds: new SQLiteProvider(db, "guilds", {
-				dataColumn: "settings"
+				dataColumn: "settings",
 			}),
 			users: new SQLiteProvider(db, "users", {
-				dataColumn: "settings"
-			})
+				dataColumn: "settings",
+			}),
 		};
 
 		if (process.env.TOP_GG_TOKEN)
@@ -114,7 +114,7 @@ export default class Client extends AkairoClient {
 		this.listenerHandler.setEmitters({
 			commandHandler: this.commandHandler,
 			inhibitorHandler: this.inhibitorHandler,
-			listenerHandler: this.listenerHandler
+			listenerHandler: this.listenerHandler,
 		});
 
 		this.commandHandler.loadAll();
@@ -134,7 +134,7 @@ export default class Client extends AkairoClient {
 			.postStats({
 				serverCount: this.guilds.cache.size,
 				shardId: this.shard?.ids[0] || undefined,
-				shardCount: this.options.shardCount
+				shardCount: this.options.shardCount,
 			})
 			.then(() => true)
 			.catch((err) => {
@@ -148,7 +148,7 @@ export default class Client extends AkairoClient {
 	async start(token: string) {
 		await Promise.all([
 			this.settings.guilds.init(),
-			this.settings.users.init()
+			this.settings.users.init(),
 		]);
 		this.login(token);
 	}

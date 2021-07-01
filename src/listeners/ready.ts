@@ -9,11 +9,21 @@ export default class ReadyListener extends Listener {
 	constructor() {
 		super("ready", {
 			emitter: "client",
-			event: "ready"
+			event: "ready",
 		});
 	}
 
 	exec() {
+		this.client.user.setActivity({
+			type: "WATCHING",
+			name: `for @POTATO help${
+				this.client.shard?.ids[0]
+					? ` | ${this.client.shard?.ids[0]}/${this.client.shard.count}`
+					: ""
+			}`,
+			shardID: this.client.shard?.ids[0] || undefined,
+		});
+
 		console.log(`[shard ${this.client.shard?.ids[0]}] I'm ready!`);
 
 		!this.client.production &&

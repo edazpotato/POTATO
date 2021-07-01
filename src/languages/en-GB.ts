@@ -10,6 +10,18 @@ export default class enGB extends Language {
 			COMMAND_PING_EMBED_TITLE: "Pong!",
 			COMMAND_PING_EMBED_FIELD_RTT_TITLE: "Round trip time",
 			COMMAND_PING_EMBED_FIELD_HEARTBEAT_TITLE: "Heartbeat",
+			COMMAND_DEBUG_DESCRIPTION: "Shows version and debug information.",
+			COMMAND_DEBUG_EMBED_TITLE: "POTATO debug info",
+			COMMAND_DEBUG_EMBED_FIELD_VERSIONS_TITLE: "Libraries",
+			COMMAND_DEBUG_EMBED_FIELD_VERSIONS_VALUE: (
+				client: Client,
+				libraries: { version: string; name: string }[]
+			) =>
+				libraries
+					.map((library) => `${library.name}: ${library.version}`)
+					.join(",\n"),
+			COMMAND_JOKE_DESCRIPTION:
+				"Displays a joke.\nIf you find a joke offensive, please [report it](https://github.com/edazpotato/potato/issues/new).",
 			COMMAND_HELP_DESCRIPTION:
 				"Displays a list of commands or detailed infromation about a single command.",
 			COMMAND_HELP_USAGE: "[command]",
@@ -85,9 +97,9 @@ export default class enGB extends Language {
 					MANAGE_NICKNAMES: "Manage Nicknames",
 					MANAGE_ROLES: "Manage Roles",
 					MANAGE_WEBHOOKS: "Manage Webhooks",
-					MANAGE_EMOJIS: "Manage Emojis"
+					MANAGE_EMOJIS: "Manage Emojis",
 				}[key]),
-			JOKES: [
+			JOKE: [
 				"Whats a Christmas trees's least favorate month? ||Sep-**TIMBER**||",
 				"What do you call a fake noodle? An Impasta.",
 				"I would avoid the sushi if I was you. It’s a little fishy.",
@@ -170,7 +182,7 @@ export default class enGB extends Language {
 				"What does a house wear? A dress.",
 				"Why can't bicycles stand up on their own? Since they are 2 tired.",
 				"I owe a lot to the sidewalks. They’ve been keeping me off the streets for years.",
-				"Imagine if alarm clocks hit you back in the morning.It would be truly alarming.",
+				"Imagine if clocks hit you back in the morning. It would be truly alarming.",
 				"Why is a skeleton a bad liar? You can see right through it.",
 				"What do you receive when you ask a lemon for help? Lemonaid.",
 				"A man sued an airline company after it lost his luggage. Sadly, he lost his case.",
@@ -193,7 +205,7 @@ export default class enGB extends Language {
 				"Why do trees have so many friends? They branch out.",
 				"Models of dragons are not to scale.",
 				"Never discuss infinity with a mathematician, they can go on about it forever.",
-				"Why don’t some couples go to the gym? Because some relationships don’t work out.",
+				"Why don’t some couples go to the gym? Because some relationships just don’t work out.",
 				"Don’t trust people that do acupuncture, they’re back stabbers.",
 				"A persistent banker wouldn’t stop hitting on me so I asked him to leave me a loan.",
 				"I ordered a book of puns last week, but i didn't get it.",
@@ -323,8 +335,8 @@ export default class enGB extends Language {
 				"I really look up to my tall friends.",
 				"I hate negative numbers and will stop at nothing to avoid them.",
 				"Long fairy tales have a tendency to dragon.",
-				"It takes guts to make a sausage."
-			]
+				"It takes guts to make a sausage.",
+			],
 		});
 	}
 }

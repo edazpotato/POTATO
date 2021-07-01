@@ -32,7 +32,7 @@
 		"bufferutil": "^4.0.3",
 		"cross-env": "^7.0.3",
 		"discord-akairo": "github:discord-akairo/discord-akairo",
-		"discord.js": "^13.0.0-dev.985d4d6a438fc9123264f6a1c600f34fccc1825f",
+		"discord.js": "^13.0.0-dev.a08ce7d.1625097834",
 		"dotenv-extended": "^2.9.0",
 		"erlpack": "github:discord/erlpack",
 		"sqlite": "^4.0.23",

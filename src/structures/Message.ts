@@ -4,7 +4,7 @@ import {
 	Message as DiscordMessage,
 	NewsChannel,
 	Structures,
-	TextChannel
+	TextChannel,
 } from "discord.js";
 
 import { CommandUtil } from "discord-akairo";
@@ -36,8 +36,8 @@ export default class Message extends DiscordMessage {
 	}
 
 	send(key: string = "", ...args: any[]) {
-		return this.channel.send({
-			content: this.language.getString(key, ...args)
+		return this.util.send({
+			content: this.language.getString(key, ...args),
 		});
 	}
 
@@ -46,7 +46,7 @@ export default class Message extends DiscordMessage {
 			content: this.language.getString(
 				"ERROR_MESSAGE",
 				this.language.getString(key, ...args)
-			)
+			),
 		});
 	}
 
@@ -55,7 +55,7 @@ export default class Message extends DiscordMessage {
 			content: this.language.getString(
 				"SUCCSESS_MESSAGE",
 				this.language.getString(key, ...args)
-			)
+			),
 		});
 	}
 }
