@@ -38,7 +38,11 @@ export default class ReadyListener extends Listener {
 
 		!this.client.production &&
 			console.log(
-				`Add me to a guild with this URL: https://discord.com/api/oauth2/authorize?client_id=${this.client.user.id}&permissions=${permissionsInt}&scope=bot%20applications.commands`
+				`[${new Date().toLocaleString()} | shard ${
+					this.client.shard?.ids[0]
+				}] Add me to a guild with this URL: https://discord.com/api/oauth2/authorize?client_id=${
+					this.client.user.id
+				}&permissions=${permissionsInt}&scope=bot%20applications.commands`
 			);
 	}
 }

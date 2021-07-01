@@ -11,8 +11,12 @@ export default class enGB extends Language {
 			COMMAND_PING_EMBED_FIELD_RTT_TITLE: "Round trip time",
 			COMMAND_PING_EMBED_FIELD_HEARTBEAT_TITLE: "Heartbeat",
 			COMMAND_DEBUG_DESCRIPTION: "Shows version and debug information.",
+			COMMAND_DEBUG_EMBED_DESCRIPTION: (
+				client: Client,
+				gitCommit: string
+			) => `Git commit: ${gitCommit}`,
 			COMMAND_DEBUG_EMBED_TITLE: "POTATO debug info",
-			COMMAND_DEBUG_EMBED_FIELD_VERSIONS_TITLE: "Libraries",
+			COMMAND_DEBUG_EMBED_FIELD_VERSIONS_TITLE: "Versions",
 			COMMAND_DEBUG_EMBED_FIELD_VERSIONS_VALUE: (
 				client: Client,
 				libraries: { version: string; name: string }[]
