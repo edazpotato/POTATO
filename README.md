@@ -2,7 +2,6 @@
 
 [![Discord Bots](https://top.gg/api/widget/status/608921626548895755.svg)](https://top.gg/bot/608921626548895755)
 
-> ^ The badge is lying it's not online
 
 -   Add to your Discord server with this link: [https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537152512&scope=applications.commands%20bot](https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537152512&scope=applications.commands%20bot)
 -   Vote on [top.gg](https://top.gg/bot/608921626548895755/vote)
@@ -18,11 +17,5 @@ After over a year of being inactive on this project, I have recently (beginning 
 
 For updates join my discord server [here](https://discord.gg/mzR7eeZ).
 
-### Running
-
-```bash
-# With nodejs 14+ installed...
-npm i -g pnpm
-pnpm i
-pnpm run start-b
-```
+## Self hosting
+Please do not attempt to self host POTATO. If you do try and self host it, no support will be provided.
