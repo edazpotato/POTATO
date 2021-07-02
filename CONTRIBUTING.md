@@ -1,0 +1,16 @@
+# Rules for contributors
+- Indent with tabs
+- Trailing commas where it makes sense (e.g. arrays)
+- Use semicolons
+- use the `function` for functions, use fat arrow functions (`() => {}`) for callbacks.
+- Speaking of fat arrow functions, always add parentheses even if there is only one argument
+- Speaking of arguments, always name them even if they don't get used (e.g. `(arg1, arg2)=>console.log(arg2)` rather than `(_, arg2)=>console.log(arg2)`)
+- Don't use libraries for simple tasks that can be easily implemnted manualy
+- Always use the unstable branch of everything - I want new stuff as soon as possible
+- Remember to add new enviroment variables to `example.env`
+- Features > Content
+- Write proper types / avoid using `any`
+- Test on production
+- Don't write tests
+- Write strings for the POTATO bot as first person from POTATO's perspective, otherwise write as first person from your perspective (don't write 'we', 'our', 'us' - it sound evil and corprate).
+- Refer to POTATO as POTATO no 'the bot'
