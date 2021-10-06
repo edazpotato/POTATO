@@ -23,7 +23,7 @@ export default class DebugCommand extends Command {
 			description: (language: Language) => ({
 				about: language.getString("COMMAND_DEBUG_DESCRIPTION"),
 			}),
-			category: "debug",
+			category: "Debug",
 			clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS"],
 			aliases: ["debug", "version"],
 		});
@@ -38,6 +38,7 @@ export default class DebugCommand extends Command {
 				getGitCommit()
 			)
 		);
+
 		embed.addField(
 			message.language.getString(
 				"COMMAND_DEBUG_EMBED_FIELD_VERSIONS_TITLE"

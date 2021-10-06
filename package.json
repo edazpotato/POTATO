@@ -8,7 +8,7 @@
 		"build-w": "tsc --watch",
 		"start": "cross-env NODE_ENV=production node dist/index.js",
 		"start-b": "pnpm run build&&pnpm run start",
-		"start-d": "cross-env NODE_ENV=development node dist/index.js"
+		"start-d": "cross-env NODE_ENV=development node dist/bot.js"
 	},
 	"repository": {
 		"type": "git",
@@ -29,13 +29,17 @@
 	"homepage": "https://github.com/edazpotato/POTATO#readme",
 	"dependencies": {
 		"@top-gg/sdk": "^3.1.1",
+		"@zikeji/hypixel": "^3.1.1",
 		"bufferutil": "^4.0.3",
+		"cache-manager": "^3.4.4",
+		"centra": "^2.4.2",
 		"cross-env": "^7.0.3",
 		"discord-akairo": "github:discord-akairo/discord-akairo",
 		"discord.js": "^13.0.0-dev.a08ce7d.1625097834",
 		"dotenv-extended": "^2.9.0",
 		"erlpack": "github:discord/erlpack",
 		"nodegit": "^0.27.0",
+		"prismarine-nbt": "1.5.0",
 		"sqlite": "^4.0.23",
 		"sqlite3": "^5.0.2",
 		"statcord.js": "github:kaname-png/statcord.js#discordjs-v13-sharding-compatibility",
@@ -44,6 +48,8 @@
 		"zlib-sync": "^0.1.7"
 	},
 	"devDependencies": {
+		"@types/cache-manager": "^3.4.0",
+		"@types/centra": "^2.2.0",
 		"@types/node": "^15.12.4",
 		"@types/nodegit": "^0.27.2"
 	}

@@ -1,5 +1,7 @@
 import { Client, Guild, Language } from "../structures";
 
+import { Components } from "@zikeji/hypixel/";
+
 export default class enGB extends Language {
 	constructor() {
 		super("en-GB", {
@@ -47,6 +49,63 @@ export default class enGB extends Language {
 			COMMAND_HELP_EMBED_DETAILS_FIELD_CLIENT_PERMISSIONS_NAME:
 				"Bot permissions",
 
+			COMMAND_PICKLE_DESCRIPTION: (client: Client) =>
+				`${
+					!client.hypixelAPI
+						? "**This command is currently disabled**\n"
+						: "Fetches general statistics about Hypixel or about a specific Hypixel player."
+				}`,
+			COMMAND_PICKLE_USAGE: "[player username or uuid]",
+			COMMAND_PICKLE_ERROR_CANNOT_GET_PLAYER_DATA: (
+				client: Client,
+				player: string
+			) => `Error fetching Hypixel player data for ${player}.`,
+			COMMAND_PICKLE_ERROR_CANNOT_GET_SERVER_DATA:
+				"Error fetching Hypixel server data.",
+			COMMAND_PICKLE_EMBED_PLAYER_TITLE: (
+				client: Client,
+				player: Components.Schemas.Player
+			) => `${player.displayname}'s Hypixel statistics`,
+			COMMAND_PICKLE_EMBED_SERVER_TITLE: "Hypixel statistics",
+			COMMAND_PICKLE_EMBED_SERVER_FIELD_WATCHDOG_NAME: "🐕‍🦺 Watchdog",
+			COMMAND_PICKLE_EMBED_SERVER_FIELD_WATCHDOG_VALUE: (
+				client: Client,
+				watchdog: {
+					watchdog_lastMinute: number;
+					staff_rollingDaily: number;
+					watchdog_total: number;
+					watchdog_rollingDaily: number;
+					staff_total: number;
+				}
+			) =>
+				`
+Last minute (Watchdog): ${watchdog.watchdog_lastMinute}
+Today (Staff): ${watchdog.staff_rollingDaily}
+Today (Watchdog): ${watchdog.watchdog_rollingDaily}
+All time (Staff): ${watchdog.staff_total}
+All time (Watchdog): ${watchdog.watchdog_total}`,
+			COMMAND_PICKLE_EMBED_SERVER_FIELD_PLAYERS_NAME: "🌐 Online players",
+			COMMAND_PICKLE_EMBED_SERVER_FIELD_PLAYERS_VALUE: (
+				client: Client,
+				players: { playerCount: number }
+			) => `${players.playerCount} online now.`,
+			COMMAND_PICKLE_EMBED_SERVER_FIELD_BOOSTERS_NAME: "✨ Boosters",
+			COMMAND_PICKLE_EMBED_SERVER_FIELD_BOOSTERS_VALUE: (
+				client: Client,
+				boosters: {
+					boosters: {
+						_id: string;
+						purchaserUuid: string;
+						amount: number;
+						originalLength: number;
+						length: number;
+						gameType: number;
+						stacked: boolean;
+						dateActivated: number;
+					}[];
+				}
+			) => `${boosters.boosters.length} active now.`,
+
 			ERROR_MESSAGE: (client: Client, msg: string) =>
 				`<:no:713222233627164673> ${msg}`,
 			SUCCESS_MESSAGE: (client: Client, msg: string) =>
@@ -66,6 +125,11 @@ export default class enGB extends Language {
 						? "these permissions"
 						: "this permission"
 				}:\n\`${permissions.join("`, `")}\``,
+			ERROR_COMMAND_DISABLED: "That command is currently disabled.",
+			ERROR_NETWORK_REQUEST_FAILED:
+				"That failed for an unknown reason. Please try again in a few minutes.",
+			ERROR_MINECRAFT_PLAYER_NOT_FOUND:
+				"I can't find a Minecraft: Java Edition account with that name or uuid.",
 			PERMISSIONS: (client: Client, key: string) =>
 				({
 					// Taken from https://github.com/FireDiscordBot/bot/blob/dbb635e59e0a8dd73ac11bbb2885e611cf0c182b/src/languages/en-US.ts#L189 because I'm lazy

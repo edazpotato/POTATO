@@ -7,6 +7,7 @@ import {
 	ListenerHandler,
 	SQLiteProvider,
 } from "discord-akairo";
+import { DefaultMeta, Client as HypixelAPIClient } from "@zikeji/hypixel";
 import {
 	ClientOptions as DiscordClientOptions,
 	ClientUser as DiscordClientUser,
@@ -15,8 +16,8 @@ import { Language, LanguageHandler, User } from ".";
 
 import { Intents } from "discord.js";
 import { LanguageID } from "../types";
-import Statcord from "statcord.js";
 import { Api as TopggAPI } from "@top-gg/sdk";
+import cacheManager from "cache-manager";
 import sqlite3 from "sqlite3";
 
 const discordOptions: DiscordClientOptions = {
@@ -39,6 +40,7 @@ export default class Client extends AkairoClient {
 	defaultLanguageID: LanguageID;
 	defaultCommandPrefix: string;
 	topggAPI?: TopggAPI;
+	hypixelAPI?: HypixelAPIClient;
 
 	constructor({ enviroment }: { enviroment: "development" | "production" }) {
 		super({ ownerID: "569414372959584256" }, discordOptions);
@@ -105,6 +107,42 @@ export default class Client extends AkairoClient {
 		if (process.env.TOP_GG_TOKEN)
 			this.topggAPI = new TopggAPI(process.env.TOP_GG_TOKEN);
 
+		if (process.env.HYPIXEL_TOKEN) {
+			const pickleCache = cacheManager.caching({
+				store: "memory",
+				max: 100,
+				ttl: 10,
+			});
+			this.hypixelAPI = new HypixelAPIClient(process.env.HYPIXEL_TOKEN, {
+				cache: {
+					get(key: string) {
+						return pickleCache.get(`pickle:${key}`);
+					},
+					set(key, value) {
+						let ttl = 5 * 60;
+
+						if (key.startsWith("resources:")) {
+							ttl = 24 * 60 * 60;
+						} else if (key === "skyblock:bazaar") {
+							// this endpoint is cached by cloudflare and updates every 10 seconds
+							ttl = 10;
+						} else if (key.startsWith("skyblock:auctions:")) {
+							// this endpoint is cached by cloudflare and updates every 60 seconds
+							ttl = 60;
+						}
+
+						pickleCache.set(`hypixel:${key}`, value, {
+							ttl,
+						});
+
+						// Typescript weirdness
+						return new Promise<void>((resolve) => resolve());
+					},
+				},
+				userAgent: "POTATO Discord bot via @zikeji/hypixel",
+			});
+		}
+
 		this.setup();
 	}
 
@@ -149,7 +187,7 @@ export default class Client extends AkairoClient {
 				console.warn(
 					`[${new Date().toLocaleString()} | shard ${
 						this.shard?.ids[0]
-					}] Error posting Top.gg stats:\n${err}`
+					}] Error posting Top.gg stats: ${err}`
 				);
 				return false;
 			});

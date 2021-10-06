@@ -9,7 +9,7 @@ export default class PingCommand extends Command {
 				about: language.getString("COMMAND_JOKE_DESCRIPTION"),
 			}),
 			category: "fun",
-			clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS"],
+			clientPermissions: ["SEND_MESSAGES"],
 			aliases: ["joke", "pun", "dadjoke"],
 		});
 	}

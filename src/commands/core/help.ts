@@ -8,7 +8,7 @@ function capitilize(name: string) {
 
 const usefulLinks = [
 	{ name: "Website", url: "https://potato.edaz.codes" },
-	{ name: "Support server", url: "https://discord.gg/mzR7eeZ" }
+	{ name: "Support server", url: "https://discord.gg/mzR7eeZ" },
 ];
 
 export default class HelpCommand extends Command {
@@ -18,12 +18,12 @@ export default class HelpCommand extends Command {
 		super("help", {
 			description: (language: Language) => ({
 				usage: language.getString("COMMAND_HELP_USAGE"),
-				about: language.getString("COMMAND_HELP_DESCRIPTION")
+				about: language.getString("COMMAND_HELP_DESCRIPTION"),
 			}),
-			category: "core",
+			category: "Core",
 			aliases: ["help", "h", "command", "usage"],
 			clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS"],
-			args: [{ id: "command", type: "command", default: null }]
+			args: [{ id: "command", type: "command", default: null }],
 		});
 	}
 
@@ -76,7 +76,7 @@ export default class HelpCommand extends Command {
 							(command: AkairoCommand, key: string) =>
 								`\`${key}\``
 						)
-						.join(", ")
+						.join(", "),
 				}))
 			);
 

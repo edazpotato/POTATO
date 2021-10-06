@@ -8,11 +8,11 @@ export default class PingCommand extends Command {
 	constructor() {
 		super("ping", {
 			description: (language: Language) => ({
-				about: language.getString("COMMAND_PING_DESCRIPTION")
+				about: language.getString("COMMAND_PING_DESCRIPTION"),
 			}),
-			category: "debug",
+			category: "Debug",
 			clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS"],
-			aliases: ["ping", "latency", "heartbeat"]
+			aliases: ["ping", "latency", "heartbeat"],
 		});
 	}
 
