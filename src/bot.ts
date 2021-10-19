@@ -1,24 +1,22 @@
-import * as dotEnvExtended from "dotenv-extended";
+import { Client, Intents, Interaction } from "discord.js";
 
-import { PotatoClient } from "./structures";
+const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-if (!process.env.DISCORD_TOKEN) {
-	const env = {
-		development: "dev.env",
-		production: ".env",
-	};
-
-	if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";
-
-	dotEnvExtended.load({
-		path: env[process.env.NODE_ENV as "development" | "production"],
+export function registerEventListeners() {
+	client.once("ready", () => {
+		console.info("Bot ready.");
 	});
+	client.on("interactionCreate", async (interaction: Interaction) => {
+		if (interaction.isCommand()) {
+		} else if (interaction.isContextMenu()) {
+		} else if (interaction.isMessageComponent()) {
+		}
+	});
+
+	console.info("Registered listeners.");
 }
 
-const client = new PotatoClient({
-	enviroment: process.env.NODE_ENV as "development" | "production",
-});
-
-client.start(process.env.DISCORD_TOKEN as string);
-
-process.on("unhandledRejection", (err) => console.error(err));
+export function start(token: string) {
+	console.info("Starting bot...");
+	client.login(token);
+}

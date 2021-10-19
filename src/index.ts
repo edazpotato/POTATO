@@ -1,48 +1,29 @@
-import * as dotEnvExtended from "dotenv-extended";
+import * as bot from "./bot";
 
-import { ShardingManager } from "discord.js";
-import Statcord from "statcord.js";
+import dotenv from "dotenv";
+import { missingEnvVarError } from "./utils";
 
-const env = {
-	development: "dev.env",
-	production: ".env",
+dotenv.config();
+
+const TOKENS = {
+	DISCORD: process.env.DISCORD_TOKEN, // Required. Get your token from https://discord.com/developers/applications
+	STATCORD: process.env.STATCORD_TOKEN, // Required. Get your token from https://statcord.com/
+	HYPIXEL: process.env.HYPIXEL_TOKEN, // Required. Get your token in Minecraft on mc.hypixel.net by running /api
+	TOP_GG: process.env.TOP_GG_TOKEN, // Optional. Get your token from https://top.gg/
 };
 
-if (!process.env.NODE_ENV) process.env.NODE_ENV = "production";
-
-dotEnvExtended.load({
-	path: env[process.env.NODE_ENV as "development" | "production"],
-});
-
-if (!process.env.DISCORD_TOKEN)
-	throw new Error(
-		"Discord token not specified! Please set the DISCORD_TOKEN enviroment variable."
+if (!TOKENS.DISCORD)
+	throw missingEnvVarError(
+		"DISCORD_TOKEN",
+		"from https://discord.com/developers/applications",
+	);
+if (!TOKENS.STATCORD)
+	missingEnvVarError("STATCORD_TOKEN", "from https://statcord.com/");
+if (!TOKENS.HYPIXEL)
+	throw missingEnvVarError(
+		"HYPIXEL_TOKEN",
+		"in game in Minecraft on mc.hypixel.net by running the /api command.",
 	);
 
-const manager = new ShardingManager("./dist/bot.js", {
-	token: process.env.DISCORD_TOKEN,
-});
-
-if (!process.env.STATCORD_TOKEN)
-	throw new Error(
-		"Statcord token not specified! Please set the STATCORD_TOKEN enviroment variable."
-	);
-
-const statcord = new Statcord.ShardingClient({
-	key: process.env.STATCORD_TOKEN as string,
-	manager,
-});
-
-statcord.on("autopost-start", () => {
-	// Emitted when statcord autopost starts
-	console.log(
-		`[${new Date().toLocaleString()} | manager] Started autoposting data to Statcord`
-	);
-});
-
-manager.on("shardCreate", (shard) =>
-	console.log(
-		`[${new Date().toLocaleString()} | manager] Launched shard ${shard.id}`
-	)
-);
-manager.spawn();
+bot.registerEventListeners();
+bot.start(TOKENS.DISCORD);
