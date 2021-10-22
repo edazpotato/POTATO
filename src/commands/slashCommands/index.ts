@@ -37,7 +37,9 @@ slashCommands.set("help", {
 					.setTitle("Help")
 					.setColor("RED")
 					.setDescription(
-						`Check out https://potato.edaz.codes for more infomation.
+						`To see a list of available commands, type a slash (\`/\`) into your Discord client and click on the POTATO icon.
+
+Check out https://potato.edaz.codes for more infomation.
 The code is at https://github.com/edazpotato/POTATO.
 For support, join my discord server: https://discord.gg/mzR7eeZ.
 [Report a joke](https://github.com/edazpotato/POTATO/issues/new?assignees=edazpotato&labels=joke+report&template=joke-report.md&title=%5BJOKE-REPORT%5D+).`,

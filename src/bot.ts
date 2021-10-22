@@ -2,7 +2,19 @@ import { Client, Intents, Interaction } from "discord.js";
 
 import { slashCommands } from "./commands/index";
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new Client({
+	intents: [Intents.FLAGS.GUILDS],
+	allowedMentions: { parse: ["users", "roles"] },
+	presence: {
+		activities: [
+			{
+				type: "WATCHING",
+				name: "for /help",
+				url: "https://potato.edaz.codes",
+			},
+		],
+	},
+});
 
 export function registerEventListeners() {
 	client.once("ready", () => {
