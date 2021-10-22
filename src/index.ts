@@ -1,6 +1,6 @@
 import * as bot from "./bot";
+import * as dotenv from "dotenv";
 
-import dotenv from "dotenv";
 import { missingEnvVarError } from "./utils";
 
 dotenv.config();

@@ -1,3 +1,5 @@
+import * as dotenv from "dotenv";
+
 import {
 	RESTGetAPIOAuth2CurrentApplicationResult,
 	Routes,
@@ -5,7 +7,6 @@ import {
 import { contextMenuCommands, slashCommands } from "./commands/index";
 
 import { REST } from "@discordjs/rest";
-import dotenv from "dotenv";
 import { missingEnvVarError } from "./utils";
 
 dotenv.config();
@@ -32,19 +33,20 @@ const rest = new REST({ version: "9" }).setToken(TOKEN);
 async function registerSlashCommands(
 	botData: RESTGetAPIOAuth2CurrentApplicationResult,
 ) {
-	await rest.put(
+	if (slashCommands.size < 1) return;
+	rest.put(
 		TESTING_GUILD_ID
 			? Routes.applicationGuildCommands(botData.id, TESTING_GUILD_ID)
 			: Routes.applicationCommands(botData.id),
 		{
 			body: slashCommands.map((command) => command.discordData.toJSON()),
 		},
-	);
-	console.info("Registered slash commands.");
+	).then(() => console.info("Registered slash commands."));
 }
 async function registerContextMenuCommands(
 	botData: RESTGetAPIOAuth2CurrentApplicationResult,
 ) {
+	if (contextMenuCommands.length < 1) return;
 	await rest.put(
 		TESTING_GUILD_ID
 			? Routes.applicationGuildCommands(botData.id, TESTING_GUILD_ID)
@@ -69,6 +71,6 @@ async function registerAllCommands(
 	const botData = (await rest.get(
 		Routes.oauth2CurrentApplication(),
 	)) as RESTGetAPIOAuth2CurrentApplicationResult;
-
-	registerAllCommands(botData);
+	// console.log(botData);
+	await registerAllCommands(botData);
 })();
