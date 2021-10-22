@@ -22,10 +22,10 @@ HYPIXEL_TOKEN=101112
 TESTING_GUILD_ID=131415
 ```
 
-> > > Note that every value except for the Top.GG token and testing guild id is required.
-> > > If you don't know where to get the tokens, try to run the bot and it will tell you where to get the missing tokens.
+> Note that every value except for the Top.GG token and testing guild id is required.
+> If you don't know where to get the tokens, try to run the bot and it will tell you where to get the missing tokens.
 
-> > > If you supply a value for `TESTING_GUILD_ID` then slash commands will only be registered to that guild. If you don't provide a value for it, they'll be registered globally.
+> If you supply a value for `TESTING_GUILD_ID` then slash commands will only be registered to that guild. If you don't provide a value for it, they'll be registered globally.
 
 3. Install dependencies
 
