@@ -52,11 +52,24 @@ For support, join my discord server: https://discord.gg/mzR7eeZ.
 slashCommands.set("oss", {
 	discordData: new SlashCommandBuilder()
 		.setName("oss")
-		.setDescription("Provites a link to the source code for POTATO."),
+		.setDescription("Provides a link to the source code for POTATO."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isCommand()) return;
 		interaction.reply({
 			content: "https://github.com/edazpotato/POTATO",
+			ephemeral: true,
+		});
+	},
+});
+slashCommands.set("invite", {
+	discordData: new SlashCommandBuilder()
+		.setName("invite")
+		.setDescription("Provites a link to add POTATO to another Guild."),
+	handler: async (interaction: Interaction) => {
+		if (!interaction.isCommand()) return;
+		interaction.reply({
+			content:
+				"https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537226240&scope=bot%20applications.commands",
 			ephemeral: true,
 		});
 	},
