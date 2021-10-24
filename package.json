@@ -26,13 +26,14 @@
 		"discord.js": "^13.2.0",
 		"dotenv": "^10.0.0",
 		"erlpack": "github:discord/erlpack",
+		"statcord.js": "^3.3.0",
 		"typescript": "^4.4.4",
 		"utf-8-validate": "^5.0.7",
 		"zlib-sync": "^0.1.7"
 	},
 	"devDependencies": {
 		"@types/node": "^16.6.1",
-		"discord-api-types": "^0.24.0",
-		"@types/node-fetch": "^2.5.10"
+		"@types/node-fetch": "^2.5.10",
+		"discord-api-types": "^0.24.0"
 	}
 }

@@ -1,5 +1,6 @@
-import * as bot from "./bot";
 import * as dotenv from "dotenv";
+
+import { createClient, registerEventListeners, start } from "./bot";
 
 import { missingEnvVarError } from "./utils";
 
@@ -18,12 +19,13 @@ if (!TOKENS.DISCORD)
 		"from https://discord.com/developers/applications",
 	);
 if (!TOKENS.STATCORD)
-	missingEnvVarError("STATCORD_TOKEN", "from https://statcord.com/");
+	throw missingEnvVarError("STATCORD_TOKEN", "from https://statcord.com/");
 if (!TOKENS.HYPIXEL)
 	throw missingEnvVarError(
 		"HYPIXEL_TOKEN",
 		"in game in Minecraft on mc.hypixel.net by running the /api command.",
 	);
 
-bot.registerEventListeners();
-bot.start(TOKENS.DISCORD);
+const { client, statcord } = createClient(TOKENS.STATCORD);
+registerEventListeners(client, statcord);
+start(client, TOKENS.DISCORD);

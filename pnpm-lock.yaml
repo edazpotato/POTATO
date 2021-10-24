@@ -10,6 +10,7 @@ specifiers:
   discord.js: ^13.2.0
   dotenv: ^10.0.0
   erlpack: github:discord/erlpack
+  statcord.js: ^3.3.0
   typescript: ^4.4.4
   utf-8-validate: ^5.0.7
   zlib-sync: ^0.1.7
@@ -21,6 +22,7 @@ dependencies:
   discord.js: 13.2.0_5971b5a749a91823f5467a6d31a2f8b3
   dotenv: 10.0.0
   erlpack: github.com/discord/erlpack/f7d730debe32c416d1b55b4217f8aef2ade05874
+  statcord.js: 3.3.0
   typescript: 4.4.4
   utf-8-validate: 5.0.7
   zlib-sync: 0.1.7
@@ -278,6 +280,20 @@ packages:
       lodash.isequal: 4.5.0
       type-fest: 1.4.0
       vali-date: 1.0.0
+    dev: false
+
+  /statcord.js/3.3.0:
+    resolution: {integrity: sha512-WRSNld2tI8uWnIuFzlN+j8RtUGWD6epJxc0WxO9o3DR2MXZfkQh387sQypTPkaDabcUgl84tOfjyCNdotZG0pw==}
+    dependencies:
+      node-fetch: 2.6.5
+      systeminformation: 5.9.8
+    dev: false
+
+  /systeminformation/5.9.8:
+    resolution: {integrity: sha512-Dt54Vuu4Q5pGCsBtbVjIzD3Lahek7qIL+2vqAPqcPtPAlFRPf+ef4VKB4F5AL5UmdjYm7NFCTnwjoiu7qtxmQQ==}
+    engines: {node: '>=4.0.0'}
+    os: [darwin, linux, win32, freebsd, openbsd, netbsd, sunos]
+    hasBin: true
     dev: false
 
   /tr46/0.0.3:
