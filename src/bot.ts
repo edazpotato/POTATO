@@ -1,11 +1,16 @@
 import { Client, Intents, Interaction } from "discord.js";
 
 import { Client as StatcordClient } from "statcord.js";
+import { AutoPoster as TopGGAutoPoster } from "topgg-autoposter";
 import { slashCommands } from "./commands/index";
 
-export function createClient(statcordToken: string): {
+export function createClient(
+	statcordToken: string,
+	topGGToken?: string,
+): {
 	client: Client;
 	statcord: StatcordClient;
+	topGGPoster?: ReturnType<typeof TopGGAutoPoster>;
 } {
 	const client = new Client({
 		intents: [Intents.FLAGS.GUILDS],
@@ -24,12 +29,16 @@ export function createClient(statcordToken: string): {
 		client,
 		key: statcordToken,
 	});
-	return { client, statcord };
+	const topGGPoster = topGGToken
+		? TopGGAutoPoster(topGGToken, client)
+		: undefined;
+	return { client, statcord, topGGPoster };
 }
 
 export function registerEventListeners(
 	client: Client,
 	statcord: StatcordClient,
+	topGGPoster?: ReturnType<typeof TopGGAutoPoster>,
 ) {
 	client.once("ready", () => {
 		console.info("Bot ready.");
@@ -63,6 +72,10 @@ export function registerEventListeners(
 		} else {
 			console.error(error);
 		}
+	});
+
+	topGGPoster?.on("posted", (stats) => {
+		console.log(`Posted stats to Top.gg | ${stats.serverCount} guilds`);
 	});
 
 	console.info("Registered listeners.");

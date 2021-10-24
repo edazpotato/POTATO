@@ -26,6 +26,9 @@ if (!TOKENS.HYPIXEL)
 		"in game in Minecraft on mc.hypixel.net by running the /api command.",
 	);
 
-const { client, statcord } = createClient(TOKENS.STATCORD);
-registerEventListeners(client, statcord);
+const { client, statcord, topGGPoster } = createClient(
+	TOKENS.STATCORD,
+	TOKENS.TOP_GG,
+);
+registerEventListeners(client, statcord, topGGPoster);
 start(client, TOKENS.DISCORD);
