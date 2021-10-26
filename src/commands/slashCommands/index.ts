@@ -110,7 +110,7 @@ Message: ${
 							(gitCommit.message.length > 50 ? "..." : "")
 						}
 Author: ${gitCommit.author.name} (*${gitCommit.author.email}*)
-Created: <t:${gitCommit.date.getTime()}>
+Created: <t:${Math.floor(gitCommit.date.getTime() / 1000)}>
 [View commit on Github](https://github.com/edazpotato/POTATO/commit/${
 							gitCommit.hash.full
 						})
