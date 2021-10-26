@@ -4,10 +4,16 @@ import {
 	RESTGetAPIOAuth2CurrentApplicationResult,
 	Routes,
 } from "discord-api-types/v9";
-import { contextMenuCommands, slashCommands } from "./commands/index";
+import { messageCommands, slashCommands, userCommands } from "./commands/index";
 
+import Collection from ".pnpm/@discordjs+collection@0.2.1/node_modules/@discordjs/collection";
 import { REST } from "@discordjs/rest";
 import { missingEnvVarError } from "./utils";
+
+const contextMenuCommands = new Collection([
+	...messageCommands,
+	...userCommands,
+]);
 
 dotenv.config();
 
@@ -46,7 +52,7 @@ async function registerSlashCommands(
 async function registerContextMenuCommands(
 	botData: RESTGetAPIOAuth2CurrentApplicationResult,
 ) {
-	if (contextMenuCommands.length < 1) return;
+	if (contextMenuCommands.size < 1) return;
 	await rest.put(
 		TESTING_GUILD_ID
 			? Routes.applicationGuildCommands(botData.id, TESTING_GUILD_ID)

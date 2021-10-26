@@ -5,6 +5,55 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import jokes from "../../../data/jokes.json";
 
 const slashCommands = new Collection<string, ApplicationCommandType>();
+
+slashCommands.set("help", {
+	discordData: new SlashCommandBuilder()
+		.setName("help")
+		.setDescription("Provides helpful information about POTATO."),
+	handler: async (interaction: Interaction) => {
+		if (!interaction.isCommand()) return;
+		interaction.reply({
+			embeds: [
+				new MessageEmbed()
+					.setTitle("Help")
+					.setColor("RED")
+					.setDescription(
+						`To see a list of available commands, type a slash (\`/\`) into your Discord client's message box and click on my icon.
+
+Check out https://potato.edaz.codes for more infomation.
+My code is at https://github.com/edazpotato/POTATO.
+For support, join my discord server: https://discord.gg/mzR7eeZ.
+[Report a joke](https://github.com/edazpotato/POTATO/issues/new?assignees=edazpotato&labels=joke+report&template=joke-report.md&title=%5BJOKE-REPORT%5D+).`,
+					),
+			],
+			ephemeral: true,
+		});
+	},
+});
+slashCommands.set("joke", {
+	discordData: new SlashCommandBuilder()
+		.setName("joke")
+		.setDescription("Sends funny joke."),
+	handler: async (interaction: Interaction) => {
+		if (!interaction.isCommand()) return;
+		const joke = jokes[Math.floor(Math.random() * jokes.length)];
+		interaction.reply({
+			content: joke,
+		});
+	},
+});
+slashCommands.set("oss", {
+	discordData: new SlashCommandBuilder()
+		.setName("oss")
+		.setDescription("Provides a link to my source code."),
+	handler: async (interaction: Interaction) => {
+		if (!interaction.isCommand()) return;
+		interaction.reply({
+			content: "https://github.com/edazpotato/POTATO",
+			ephemeral: true,
+		});
+	},
+});
 slashCommands.set("ping", {
 	discordData: new SlashCommandBuilder()
 		.setName("ping")
@@ -25,46 +74,10 @@ slashCommands.set("ping", {
 		});
 	},
 });
-slashCommands.set("help", {
-	discordData: new SlashCommandBuilder()
-		.setName("help")
-		.setDescription("Provides helpful information about POTATO."),
-	handler: async (interaction: Interaction) => {
-		if (!interaction.isCommand()) return;
-		interaction.reply({
-			embeds: [
-				new MessageEmbed()
-					.setTitle("Help")
-					.setColor("RED")
-					.setDescription(
-						`To see a list of available commands, type a slash (\`/\`) into your Discord client and click on the POTATO icon.
-
-Check out https://potato.edaz.codes for more infomation.
-The code is at https://github.com/edazpotato/POTATO.
-For support, join my discord server: https://discord.gg/mzR7eeZ.
-[Report a joke](https://github.com/edazpotato/POTATO/issues/new?assignees=edazpotato&labels=joke+report&template=joke-report.md&title=%5BJOKE-REPORT%5D+).`,
-					),
-			],
-			ephemeral: true,
-		});
-	},
-});
-slashCommands.set("oss", {
-	discordData: new SlashCommandBuilder()
-		.setName("oss")
-		.setDescription("Provides a link to the source code for POTATO."),
-	handler: async (interaction: Interaction) => {
-		if (!interaction.isCommand()) return;
-		interaction.reply({
-			content: "https://github.com/edazpotato/POTATO",
-			ephemeral: true,
-		});
-	},
-});
 slashCommands.set("invite", {
 	discordData: new SlashCommandBuilder()
 		.setName("invite")
-		.setDescription("Provites a link to add POTATO to another Guild."),
+		.setDescription("Provides a link to add me to another Guild."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isCommand()) return;
 		interaction.reply({
@@ -77,7 +90,7 @@ slashCommands.set("invite", {
 slashCommands.set("debug", {
 	discordData: new SlashCommandBuilder()
 		.setName("debug")
-		.setDescription("Provides information for debugging POTATO."),
+		.setDescription("Provides information for debugging me."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isCommand()) return;
 		interaction.reply({
@@ -91,17 +104,17 @@ slashCommands.set("debug", {
 		});
 	},
 });
-slashCommands.set("joke", {
+slashCommands.set("vote", {
 	discordData: new SlashCommandBuilder()
-		.setName("joke")
-		.setDescription("Sends funny joke."),
+		.setName("vote")
+		.setDescription("Provides a link to upvote me on Top.GG."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isCommand()) return;
-		const joke = jokes[Math.floor(Math.random() * jokes.length)];
 		interaction.reply({
-			content: joke,
+			content: "https://top.gg/bot/608921626548895755/vote",
+			ephemeral: true,
 		});
 	},
 });
 
-export default slashCommands;
+export { slashCommands };

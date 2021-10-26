@@ -43,13 +43,19 @@ pnpm i
 pnpm run build
 ```
 
-5.  Register slash commands
+5. Set up database
+
+```bash
+pnpm run setup-database
+```
+
+6.  Register slash commands
 
 ```bash
 pnpm run register
 ```
 
-6. Run bot
+7. Run bot
 
 ```bash
 # With pnpm scripts

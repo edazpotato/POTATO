@@ -1,10 +1,13 @@
 import { Client, Intents, Interaction } from "discord.js";
+import { messageCommands, slashCommands, userCommands } from "./commands";
 
+import { Database } from "sqlite";
 import { Client as StatcordClient } from "statcord.js";
 import { AutoPoster as TopGGAutoPoster } from "topgg-autoposter";
-import { slashCommands } from "./commands/index";
+import sqlite3 from "sqlite3";
 
 export function createClient(
+	db: Database<sqlite3.Database, sqlite3.Statement>,
 	statcordToken: string,
 	topGGToken?: string,
 ): {
@@ -36,6 +39,7 @@ export function createClient(
 }
 
 export function registerEventListeners(
+	db: Database<sqlite3.Database, sqlite3.Statement>,
 	client: Client,
 	statcord: StatcordClient,
 	topGGPoster?: ReturnType<typeof TopGGAutoPoster>,
@@ -59,6 +63,22 @@ export function registerEventListeners(
 				});
 			}
 		} else if (interaction.isContextMenu()) {
+			const type = interaction.targetType;
+			const command =
+				type === "MESSAGE"
+					? messageCommands.get(interaction.commandName)
+					: userCommands.get(interaction.commandName);
+			if (!command) return;
+			statcord.postCommand(command.discordData.name, interaction.user.id);
+			try {
+				await command.handler(interaction);
+			} catch (error) {
+				console.error(error);
+				await interaction.reply({
+					content: "There was an error while executing this action!",
+					ephemeral: true,
+				});
+			}
 		} else if (interaction.isMessageComponent()) {
 		}
 	});
@@ -81,7 +101,11 @@ export function registerEventListeners(
 	console.info("Registered listeners.");
 }
 
-export function start(client: Client, token: string) {
+export function start(
+	db: Database<sqlite3.Database, sqlite3.Statement>,
+	client: Client,
+	token: string,
+) {
 	console.info("Starting bot...");
 	client.login(token);
 }
