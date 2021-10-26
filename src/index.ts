@@ -12,6 +12,7 @@ dotenv.config();
 		STATCORD: process.env.STATCORD_TOKEN, // Required. Get your token from https://statcord.com/
 		HYPIXEL: process.env.HYPIXEL_TOKEN, // Required. Get your token in Minecraft on mc.hypixel.net by running /api
 		TOP_GG: process.env.TOP_GG_TOKEN, // Optional. Get your token from https://top.gg/
+		TESTING_GUILD_ID: process.env.TESTING_GUILD_ID, // Optional. If set, bot is considered to be in development mode.
 	};
 
 	if (!TOKENS.DISCORD)
@@ -29,10 +30,19 @@ dotenv.config();
 			"HYPIXEL_TOKEN",
 			"in game in Minecraft on mc.hypixel.net by running the /api command.",
 		);
+	const developmentMode = !!TOKENS.TESTING_GUILD_ID;
+	if (developmentMode) {
+		console.info("TESTING_GUILD_ID provided. Bot is in development mode.");
+	} else {
+		console.info(
+			"No TESTING_GUILD_ID provided. Bot is in production mode.",
+		);
+	}
 
 	const db = await openDatabase();
 	const { client, statcord, topGGPoster } = createClient(
 		db,
+		developmentMode,
 		TOKENS.STATCORD,
 		TOKENS.TOP_GG,
 	);

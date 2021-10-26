@@ -1,5 +1,6 @@
 import { Database, open } from "sqlite";
 
+import Git from "nodegit";
 import path from "path";
 import sqlite3 from "sqlite3";
 
@@ -24,3 +25,38 @@ export async function openDatabase(): Promise<
 			.catch(async (err) => reject(err));
 	});
 }
+
+let gitCommit: {
+	hash: { full: string; short: string };
+	author: { name: string; email: string };
+	message: string;
+	date: Date;
+};
+Git.Repository.open(process.cwd())
+	.then((repository) => {
+		return repository.getHeadCommit();
+	})
+	.then((commit) => {
+		const date = commit.date();
+		const message = commit.message();
+
+		const author = commit.author();
+		gitCommit = {
+			...gitCommit,
+			author: { name: author.name(), email: author.email() },
+			message,
+			date,
+		};
+		return commit.sha();
+	})
+	.then((hash) => {
+		gitCommit = {
+			...gitCommit,
+			hash: {
+				full: hash,
+				short: hash.slice(0, 7),
+			},
+		};
+	});
+
+export { gitCommit };

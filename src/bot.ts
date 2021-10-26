@@ -8,11 +8,12 @@ import sqlite3 from "sqlite3";
 
 export function createClient(
 	db: Database<sqlite3.Database, sqlite3.Statement>,
+	developmentMode: boolean,
 	statcordToken: string,
 	topGGToken?: string,
 ): {
 	client: Client;
-	statcord: StatcordClient;
+	statcord?: StatcordClient;
 	topGGPoster?: ReturnType<typeof TopGGAutoPoster>;
 } {
 	const client = new Client({
@@ -28,12 +29,16 @@ export function createClient(
 			],
 		},
 	});
-	const statcord = new StatcordClient({
-		client,
-		key: statcordToken,
-	});
-	const topGGPoster = topGGToken
-		? TopGGAutoPoster(topGGToken, client)
+	const statcord = !developmentMode
+		? new StatcordClient({
+				client,
+				key: statcordToken,
+		  })
+		: undefined;
+	const topGGPoster = !developmentMode
+		? topGGToken
+			? TopGGAutoPoster(topGGToken, client)
+			: undefined
 		: undefined;
 	return { client, statcord, topGGPoster };
 }
@@ -41,18 +46,22 @@ export function createClient(
 export function registerEventListeners(
 	db: Database<sqlite3.Database, sqlite3.Statement>,
 	client: Client,
-	statcord: StatcordClient,
+	statcord?: StatcordClient,
 	topGGPoster?: ReturnType<typeof TopGGAutoPoster>,
 ) {
 	client.once("ready", () => {
 		console.info("Bot ready.");
-		statcord.autopost();
+		statcord && statcord.autopost();
 	});
 	client.on("interactionCreate", async (interaction: Interaction) => {
 		if (interaction.isCommand()) {
 			const command = slashCommands.get(interaction.commandName);
 			if (!command) return;
-			statcord.postCommand(command.discordData.name, interaction.user.id);
+			statcord &&
+				statcord.postCommand(
+					command.discordData.name,
+					interaction.user.id,
+				);
 			try {
 				await command.handler(interaction);
 			} catch (error) {
@@ -69,7 +78,11 @@ export function registerEventListeners(
 					? messageCommands.get(interaction.commandName)
 					: userCommands.get(interaction.commandName);
 			if (!command) return;
-			statcord.postCommand(command.discordData.name, interaction.user.id);
+			statcord &&
+				statcord.postCommand(
+					command.discordData.name,
+					interaction.user.id,
+				);
 			try {
 				await command.handler(interaction);
 			} catch (error) {
@@ -83,16 +96,18 @@ export function registerEventListeners(
 		}
 	});
 
-	statcord.on("autopost-start", () => {
-		console.log("Started autoposting statistics to Statcord.");
-	});
-	statcord.on("post", (error) => {
-		if (!error) {
-			console.info("Successfuly posted statistics to Statcord.");
-		} else {
-			console.error(error);
-		}
-	});
+	statcord &&
+		statcord.on("autopost-start", () => {
+			console.log("Started autoposting statistics to Statcord.");
+		});
+	statcord &&
+		statcord.on("post", (error) => {
+			if (!error) {
+				console.info("Successfuly posted statistics to Statcord.");
+			} else {
+				console.error(error);
+			}
+		});
 
 	topGGPoster?.on("posted", (stats) => {
 		console.log(`Posted stats to Top.gg | ${stats.serverCount} guilds`);
