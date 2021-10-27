@@ -27,7 +27,6 @@
 		"discord.js": "^13.2.0",
 		"dotenv": "^10.0.0",
 		"erlpack": "github:discord/erlpack",
-		"nodegit": "^0.27.0",
 		"sqlite": "^4.0.23",
 		"sqlite3": "^5.0.2",
 		"statcord.js": "^3.3.0",
@@ -42,5 +41,8 @@
 		"@types/node-fetch": "^2.5.10",
 		"@types/nodegit": "^0.27.3",
 		"discord-api-types": "^0.24.0"
+	},
+	"disabledDeps😳": {
+		"nodegit": "^0.27.0"
 	}
 }

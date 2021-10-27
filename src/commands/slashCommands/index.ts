@@ -2,8 +2,10 @@ import { Collection, Interaction, MessageEmbed } from "discord.js";
 
 import { ApplicationCommandType } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { gitCommit } from "../../utils";
 import jokes from "../../../data/jokes.json";
+import packageJSON from "../../../package.json";
+
+// import { gitCommit } from "../../utils";
 
 const slashCommands = new Collection<string, ApplicationCommandType>();
 
@@ -99,22 +101,30 @@ slashCommands.set("debug", {
 				new MessageEmbed()
 					.setTitle("Debug")
 					.setColor("RED")
+					// 					.addField(
+					// 						"Git commit",
+					// 						`Hash: ${gitCommit.hash.short}
+					// Message: ${
+					// 							gitCommit.message
+					// 								.trim()
+					// 								.replaceAll("\n", " ")
+					// 								.slice(0, 50) +
+					// 							(gitCommit.message.length > 50 ? "..." : "")
+					// 						}
+					// Author: ${gitCommit.author.name} (*${gitCommit.author.email}*)
+					// Created: <t:${Math.floor(gitCommit.date.getTime() / 1000)}>
+					// [View commit on Github](https://github.com/edazpotato/POTATO/commit/${
+					// 							gitCommit.hash.full
+					// 						})
+					// `,
+					// 					),
 					.addField(
-						"Git commit",
-						`Hash: ${gitCommit.hash.short}
-Message: ${
-							gitCommit.message
-								.trim()
-								.replaceAll("\n", " ")
-								.slice(0, 50) +
-							(gitCommit.message.length > 50 ? "..." : "")
-						}
-Author: ${gitCommit.author.name} (*${gitCommit.author.email}*)
-Created: <t:${Math.floor(gitCommit.date.getTime() / 1000)}>
-[View commit on Github](https://github.com/edazpotato/POTATO/commit/${
-							gitCommit.hash.full
-						})
-`,
+						"Package versions",
+						`discord.js v${packageJSON.dependencies[
+							"discord.js"
+						].slice(1)}
+@discordjs/rest v${packageJSON.dependencies["@discordjs/rest"].slice(1)}
+typescript v${packageJSON.dependencies["typescript"].slice(1)}`,
 					),
 			],
 			ephemeral: true,
