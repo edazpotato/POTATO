@@ -120,11 +120,10 @@ slashCommands.set("debug", {
 					// 					),
 					.addField(
 						"Package versions",
-						`discord.js v${packageJSON.dependencies[
-							"discord.js"
-						].slice(1)}
-@discordjs/rest v${packageJSON.dependencies["@discordjs/rest"].slice(1)}
-typescript v${packageJSON.dependencies["typescript"].slice(1)}`,
+						`
+discord.js ${packageJSON.dependencies["discord.js"].slice(1)}
+@discordjs/rest ${packageJSON.dependencies["@discordjs/rest"].slice(1)}
+typescript ${packageJSON.dependencies["typescript"].slice(1)}`.slice(1),
 					),
 			],
 			ephemeral: true,
