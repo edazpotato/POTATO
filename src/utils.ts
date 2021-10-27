@@ -26,6 +26,8 @@ export async function openDatabase(): Promise<
 	});
 }
 
+const onlineTimstamp = Date.now();
+
 // let gitCommit: {
 // 	hash: { full: string; short: string };
 // 	author: { name: string; email: string };
@@ -59,4 +61,4 @@ export async function openDatabase(): Promise<
 // 		};
 // 	});
 
-// export { gitCommit };
+export { onlineTimstamp };

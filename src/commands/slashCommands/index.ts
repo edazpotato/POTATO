@@ -3,9 +3,8 @@ import { Collection, Interaction, MessageEmbed } from "discord.js";
 import { ApplicationCommandType } from "../../types";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import jokes from "../../../data/jokes.json";
+import { onlineTimstamp } from "../../utils";
 import packageJSON from "../../../package.json";
-
-// import { gitCommit } from "../../utils";
 
 const slashCommands = new Collection<string, ApplicationCommandType>();
 
@@ -119,11 +118,20 @@ slashCommands.set("debug", {
 					// `,
 					// 					),
 					.addField(
+						"Metrics",
+						`I have \`${jokes.length}\` jokes,
+I'm in \`${interaction.client.guilds.cache.size}\` guilds,
+and I most recently came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
+					)
+					.addField(
 						"Package versions",
-						`
-discord.js ${packageJSON.dependencies["discord.js"].slice(1)}
-@discordjs/rest ${packageJSON.dependencies["@discordjs/rest"].slice(1)}
-typescript ${packageJSON.dependencies["typescript"].slice(1)}`.slice(1),
+						`I'm using \`discord.js\` version ${packageJSON.dependencies[
+							"discord.js"
+						].slice(1)},
+\`@discordjs/rest\` version ${packageJSON.dependencies["@discordjs/rest"].slice(
+							1,
+						)},
+and \`typescript\` version ${packageJSON.dependencies["typescript"].slice(1)}.`,
 					),
 			],
 			ephemeral: true,
