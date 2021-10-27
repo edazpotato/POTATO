@@ -125,13 +125,15 @@ and I most recently came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
 					)
 					.addField(
 						"Package versions",
-						`I'm using \`discord.js\` version ${packageJSON.dependencies[
+						`I'm using [\`discord.js\`](https://www.npmjs.com/package/discord.js) version \`${packageJSON.dependencies[
 							"discord.js"
-						].slice(1)},
-\`@discordjs/rest\` version ${packageJSON.dependencies["@discordjs/rest"].slice(
-							1,
-						)},
-and \`typescript\` version ${packageJSON.dependencies["typescript"].slice(1)}.`,
+						].slice(1)}\`,
+[\`@discordjs/rest\`](https://www.npmjs.com/package/@discordjs/rest) version \`${packageJSON.dependencies[
+							"@discordjs/rest"
+						].slice(1)}\`,
+and [\`typescript\`](https://www.npmjs.com/package/typescript) version \`${packageJSON.dependencies[
+							"typescript"
+						].slice(1)}\`.`,
 					),
 			],
 			ephemeral: true,
