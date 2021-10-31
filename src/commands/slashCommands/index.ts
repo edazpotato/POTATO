@@ -120,8 +120,8 @@ slashCommands.set("debug", {
 					.addField(
 						"Metrics",
 						`I have \`${jokes.length}\` jokes,
-I'm can see \`${interaction.client.guilds.cache.size}\` guilds,
-and I most recently came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
+I've got \`${interaction.client.guilds.cache.size}\` guilds cache,
+and I came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
 					)
 					.addField(
 						"Package versions",
