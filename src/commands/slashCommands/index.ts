@@ -120,7 +120,7 @@ slashCommands.set("debug", {
 					.addField(
 						"Metrics",
 						`I have \`${jokes.length}\` jokes,
-I've got \`${interaction.client.guilds.cache.size}\` guilds cache,
+I've got \`${interaction.client.guilds.cache.size}\` guilds cached,
 and I came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
 					)
 					.addField(
