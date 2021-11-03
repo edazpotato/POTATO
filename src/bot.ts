@@ -4,6 +4,7 @@ import { messageCommands, slashCommands, userCommands } from "./commands";
 import { Database } from "sqlite";
 import { Client as StatcordClient } from "statcord.js";
 import { AutoPoster as TopGGAutoPoster } from "topgg-autoposter";
+import { buttonHandlers } from "./messageComponentHandlers";
 import sqlite3 from "sqlite3";
 
 export function createClient(
@@ -17,7 +18,13 @@ export function createClient(
 	topGGPoster?: ReturnType<typeof TopGGAutoPoster>;
 } {
 	const client = new Client({
-		intents: [Intents.FLAGS.GUILDS],
+		intents: [
+			Intents.FLAGS.GUILDS,
+			// Intents.FLAGS.DIRECT_MESSAGES,
+			Intents.FLAGS.GUILD_MESSAGES,
+			Intents.FLAGS.GUILD_INVITES,
+			// Intents.FLAGS.GUILD_MEMBERS,
+		],
 		allowedMentions: { parse: ["users", "roles"] },
 		presence: {
 			activities: [
@@ -63,7 +70,14 @@ export function registerEventListeners(
 					interaction.user.id,
 				);
 			try {
-				await command.handler(interaction);
+				await command.handler(interaction, db);
+				// If it hasn't had a reply or been deffered...
+				if (!interaction.replied && !interaction.deferred) {
+					await interaction.reply({
+						content: "Nothing seemed to happen for some reason.",
+						ephemeral: true,
+					});
+				}
 			} catch (error) {
 				console.error(error);
 				await interaction.reply({
@@ -84,7 +98,7 @@ export function registerEventListeners(
 					interaction.user.id,
 				);
 			try {
-				await command.handler(interaction);
+				await command.handler(interaction, db);
 			} catch (error) {
 				console.error(error);
 				await interaction.reply({
@@ -93,6 +107,20 @@ export function registerEventListeners(
 				});
 			}
 		} else if (interaction.isMessageComponent()) {
+			if (interaction.isButton()) {
+				const button = buttonHandlers.get(interaction.customId);
+				if (!button) return;
+				try {
+					await button(interaction, db);
+				} catch (error) {
+					console.error(error);
+					await interaction.reply({
+						content:
+							"There was an error while handling this button press!",
+						ephemeral: true,
+					});
+				}
+			}
 		}
 	});
 

@@ -15,5 +15,6 @@ openDatabase().then(async (db) => {
 	} catch (e) {
 		console.info('Error creating table "guilds".');
 	}
+
 	return;
 });

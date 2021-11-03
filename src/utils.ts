@@ -1,8 +1,10 @@
-import { Database, open } from "sqlite";
-
-import Git from "nodegit";
+import { DatabaseType } from "./types";
+import { open } from "sqlite";
 import path from "path";
 import sqlite3 from "sqlite3";
+
+// import Git from "nodegit";
+
 
 export function missingEnvVarError(
 	variable: string,
@@ -13,9 +15,7 @@ export function missingEnvVarError(
 	);
 }
 
-export async function openDatabase(): Promise<
-	Database<sqlite3.Database, sqlite3.Statement>
-> {
+export async function openDatabase(): Promise<DatabaseType> {
 	return new Promise((resolve, reject) => {
 		open({
 			filename: path.join("data", "informationpedestal.db"),

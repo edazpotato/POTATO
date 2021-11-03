@@ -9,7 +9,7 @@ specifiers:
   '@types/nodegit': ^0.27.3
   bufferutil: ^4.0.5
   discord-api-types: ^0.24.0
-  discord.js: ^13.3.0
+  discord.js: ^13.3.1
   dotenv: ^10.0.0
   erlpack: github:discord/erlpack
   sqlite: ^4.0.23
@@ -24,7 +24,7 @@ dependencies:
   '@discordjs/builders': 0.7.0
   '@discordjs/rest': 0.1.0-canary.0
   bufferutil: 4.0.5
-  discord.js: 13.3.0_5971b5a749a91823f5467a6d31a2f8b3
+  discord.js: 13.3.1_5971b5a749a91823f5467a6d31a2f8b3
   dotenv: 10.0.0
   erlpack: github.com/discord/erlpack/f7d730debe32c416d1b55b4217f8aef2ade05874
   sqlite: 4.0.23
@@ -398,8 +398,8 @@ packages:
     resolution: {integrity: sha512-X0uA2a92cRjowUEXpLZIHWl4jiX1NsUpDhcEOpa1/hpO1vkaokgZ8kkPtPih9hHth5UVQ3mHBu/PpB4qjyfJ4A==}
     engines: {node: '>=12'}
 
-  /discord.js/13.3.0_5971b5a749a91823f5467a6d31a2f8b3:
-    resolution: {integrity: sha512-kZcDVrQRTuzjRx99/Xl9HF1Kt7xNkiN4Gwvk1hNmLRAn+7Syzw9XTkQZdOPXLpijhbTNsZcdAaMxgvTmtyNdyA==}
+  /discord.js/13.3.1_5971b5a749a91823f5467a6d31a2f8b3:
+    resolution: {integrity: sha512-zn4G8tL5+tMV00+0aSsVYNYcIfMSdT2g0nudKny+Ikd+XKv7m6bqI7n3Vji0GIRqXDr5ArPaw+iYFM2I1Iw3vg==}
     engines: {node: '>=16.6.0', npm: '>=7.0.0'}
     dependencies:
       '@discordjs/builders': 0.8.2
