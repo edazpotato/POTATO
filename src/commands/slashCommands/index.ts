@@ -310,20 +310,28 @@ slashCommands.set("settings", {
 								{ $id: interaction.guild.id },
 							);
 						} else {
-							await db.run(
-								"UPDATE guilds SET logging_enabled=1, auto_moderation_enabled=1 WHERE discord_id=$id",
-								{ $id: interaction.guild.id },
-							);
+							// If automoderation isn't already enabled
+							if (!res["auto_moderation_enabled"])
+								await db.run(
+									"UPDATE guilds SET logging_enabled=1, auto_moderation_enabled=1 WHERE discord_id=$id",
+									{ $id: interaction.guild.id },
+								);
 						}
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
 									.setColor("RED")
 									.setDescription(
-										"Automoderation is now **enabled** for this guild.",
+										`Automoderation ${
+											res["auto_moderation_enabled"]
+												? "was already"
+												: "is now"
+										} **enabled** for this guild.`,
 									)
 									.setFooter(
-										"This guild's messages are now being logged.",
+										`This guild's messages are ${
+											res["logging_enabled"] ? "" : "now"
+										} being logged.`,
 									),
 							],
 						});
@@ -349,28 +357,35 @@ slashCommands.set("settings", {
 						// If anti-raid is also disabled, then we can disable logging entirely
 						const should_logging_be_disabled =
 							res["anti_raid_enabled"] === 0;
-						if (should_logging_be_disabled) {
-							await db.run(
-								"UPDATE guilds SET logging_enabled=0, auto_moderation_enabled=0 WHERE discord_id=$id",
-								{ $id: interaction.guild.id },
-							);
-						} else {
-							await db.run(
-								"UPDATE guilds SET auto_moderation_enabled=0 WHERE discord_id=$id",
-								{ $id: interaction.guild.id },
-							);
+						// If it's currently enabled
+						if (res["auto_moderation_enabled"]) {
+							if (should_logging_be_disabled) {
+								await db.run(
+									"UPDATE guilds SET logging_enabled=0, auto_moderation_enabled=0 WHERE discord_id=$id",
+									{ $id: interaction.guild.id },
+								);
+							} else {
+								await db.run(
+									"UPDATE guilds SET auto_moderation_enabled=0 WHERE discord_id=$id",
+									{ $id: interaction.guild.id },
+								);
+							}
 						}
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
 									.setColor("RED")
 									.setDescription(
-										"Automoderation is now **disabled** for this guild.",
+										`Automoderation ${
+											res["auto_moderation_enabled"]
+												? "is now"
+												: "was already"
+										} **disabled** for this guild.`,
 									)
 									.setFooter(
 										should_logging_be_disabled
 											? "This guild's messages are no longer being logged."
-											: "This guild's messages are still being logged because antiraid is still enabled.",
+											: "This guild's messages are still being logged because antiraid is enabled.",
 									),
 							],
 						});
@@ -397,7 +412,7 @@ slashCommands.set("settings", {
 									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**.",
 								ephemeral: true,
 							});
-						const body = `Automoderation is **${
+						const body = `Antiraid is **${
 							res["anti_raid_enabled"] === 1
 								? "enabled"
 								: "disabled"
@@ -434,20 +449,28 @@ slashCommands.set("settings", {
 								{ $id: interaction.guild.id },
 							);
 						} else {
-							await db.run(
-								"UPDATE guilds SET logging_enabled=1, anti_raid_enabled=1 WHERE discord_id=$id",
-								{ $id: interaction.guild.id },
-							);
+							// If antiraid isn't already enabled
+							if (!res["anti_raid_enabled"])
+								await db.run(
+									"UPDATE guilds SET logging_enabled=1, anti_raid_enabled=1 WHERE discord_id=$id",
+									{ $id: interaction.guild.id },
+								);
 						}
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
 									.setColor("RED")
 									.setDescription(
-										"Antiraid is now **enabled** for this guild.",
+										`Antiraid ${
+											res["anti_raid_enabled"]
+												? "was already"
+												: "is now"
+										} **enabled** for this guild.`,
 									)
 									.setFooter(
-										"This guild's messages are now being logged.",
+										`This guild's messages are ${
+											res["logging_enabled"] ? "" : "now"
+										} being logged.`,
 									),
 							],
 						});
@@ -472,29 +495,36 @@ slashCommands.set("settings", {
 							});
 						// If anti-raid is also disabled, then we can disable logging entirely
 						const should_logging_be_disabled =
-							res["anti_raid_enabled"] === 0;
-						if (should_logging_be_disabled) {
-							await db.run(
-								"UPDATE guilds SET logging_enabled=0, auto_moderation_enabled=0 WHERE discord_id=$id",
-								{ $id: interaction.guild.id },
-							);
-						} else {
-							await db.run(
-								"UPDATE guilds SET auto_moderation_enabled=0 WHERE discord_id=$id",
-								{ $id: interaction.guild.id },
-							);
+							res["auto_moderation_enabled"] === 0;
+						// If it's currently enabled
+						if (res["anti_raid_enabled"]) {
+							if (should_logging_be_disabled) {
+								await db.run(
+									"UPDATE guilds SET logging_enabled=0, anti_raid_enabled=0 WHERE discord_id=$id",
+									{ $id: interaction.guild.id },
+								);
+							} else {
+								await db.run(
+									"UPDATE guilds SET anti_raid_enabled=0 WHERE discord_id=$id",
+									{ $id: interaction.guild.id },
+								);
+							}
 						}
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
 									.setColor("RED")
 									.setDescription(
-										"Automoderation is now **disabled** for this guild.",
+										`Antiraid ${
+											res["anti_raid_enabled"]
+												? "is now"
+												: "was already"
+										} **disabled** for this guild.`,
 									)
 									.setFooter(
 										should_logging_be_disabled
 											? "This guild's messages are no longer being logged."
-											: "This guild's messages are still being logged because antiraid is still enabled.",
+											: "This guild's messages are still being logged because automoderation is enabled.",
 									),
 							],
 						});

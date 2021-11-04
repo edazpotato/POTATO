@@ -83,7 +83,7 @@ module.exports = class extends BaseCluster {
 						this.manager.shardCount
 					}${
 						this.clusterID
-							? ` @${this.clusterID}/${this.manager.clusterCount}`
+							? ` | ${this.clusterID}/${this.manager.clusterCount}`
 							: ""
 					}`,
 					url: "https://potato.edaz.codes/",
