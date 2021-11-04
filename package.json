@@ -1,14 +1,14 @@
 {
 	"private": true,
 	"name": "potato",
-	"version": "3.0.0",
+	"version": "3.1.0",
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch",
-		"register": "node dist/src/registerCommands.js",
-		"start": "node dist/src/index.js",
-		"setup-database": "node dist/src/setupDatabase.js"
+		"register": "node dist/src/scripts/registerCommands.js",
+		"start": "node dist/src/sharder.js",
+		"setup-database": "node dist/src/scripts/setupDatabase.js"
 	},
 	"repository": {
 		"type": "git",
@@ -27,6 +27,7 @@
 		"discord.js": "^13.3.1",
 		"dotenv": "^10.0.0",
 		"erlpack": "github:discord/erlpack",
+		"kurasuta": "^3.0.1",
 		"sqlite": "^4.0.23",
 		"sqlite3": "^5.0.2",
 		"statcord.js": "^3.3.0",

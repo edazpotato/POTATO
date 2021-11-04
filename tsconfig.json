@@ -3,7 +3,7 @@
 		// "skipLibCheck": true, // Fix Discord.js not wanting to upgrade to node-fetch V3
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
-		// "incremental": true,
+		"incremental": false,
 		"target": "ESNext",
 		"module": "commonjs",
 		"allowJs": true,

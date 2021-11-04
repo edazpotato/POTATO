@@ -10,7 +10,7 @@ import {
 	userCommands,
 } from "../commands/index";
 
-import Collection from ".pnpm/@discordjs+collection@0.2.1/node_modules/@discordjs/collection";
+import { Collection } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { missingEnvVarError } from "../misc/utils";
 

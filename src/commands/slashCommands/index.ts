@@ -48,7 +48,7 @@ slashCommands.set("joke", {
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isApplicationCommand()) return;
 		const joke = jokes[Math.floor(Math.random() * jokes.length)];
-		interaction.reply({
+		return interaction.reply({
 			content: joke,
 		});
 	},
@@ -59,7 +59,7 @@ slashCommands.set("oss", {
 		.setDescription("Provides a link to my source code."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isApplicationCommand()) return;
-		interaction.reply({
+		return interaction.reply({
 			content: "https://github.com/edazpotato/POTATO",
 			ephemeral: true,
 		});
@@ -71,7 +71,7 @@ slashCommands.set("ping", {
 		.setDescription("Provides latency information."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isApplicationCommand()) return;
-		interaction.reply({
+		return interaction.reply({
 			embeds: [
 				new MessageEmbed()
 					.setTitle("Latency")
@@ -91,7 +91,7 @@ slashCommands.set("invite", {
 		.setDescription("Provides a link to add me to another Guild."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isApplicationCommand()) return;
-		interaction.reply({
+		return interaction.reply({
 			content:
 				"https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537226240&scope=bot%20applications.commands",
 			ephemeral: true,
@@ -104,7 +104,7 @@ slashCommands.set("debug", {
 		.setDescription("Provides information for debugging me."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isApplicationCommand()) return;
-		interaction.reply({
+		return interaction.reply({
 			embeds: [
 				new MessageEmbed()
 					.setTitle("Debug")
@@ -141,8 +141,8 @@ and I came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
 [\`@discordjs/rest\`](https://www.npmjs.com/package/@discordjs/rest) version \`${packageJSON.dependencies[
 							"@discordjs/rest"
 						].slice(1)}\`,
-and [\`typescript\`](https://www.npmjs.com/package/typescript) version \`${packageJSON.dependencies[
-							"typescript"
+and [\`kurasuta\`](https://www.npmjs.com/package/kurasuta) version \`${packageJSON.dependencies[
+							"kurasuta"
 						].slice(1)}\`.`,
 					),
 			],
@@ -156,7 +156,7 @@ slashCommands.set("vote", {
 		.setDescription("Provides a link to upvote me on Top.GG."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isApplicationCommand()) return;
-		interaction.reply({
+		return interaction.reply({
 			content: "https://top.gg/bot/608921626548895755/vote",
 			ephemeral: true,
 		});
@@ -206,8 +206,8 @@ slashCommands.set("deletemydata", {
 				],
 			});
 		}
-		interaction.reply({
-			embeds: [],
+		return interaction.reply({
+			content: "Soon™",
 		});
 	},
 });
@@ -303,16 +303,18 @@ slashCommands.set("settings", {
 							"SELECT logging_enabled, auto_moderation_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
-						if (!res)
-							return interaction.reply({
-								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to enable features that require message logging, you'll need to op-in via `/opintologging`",
-								ephemeral: true,
-							});
-						await db.run(
-							"UPDATE guilds SET logging_enabled=1, auto_moderation_enabled=1 WHERE discord_id=$id",
-							{ $id: interaction.guild.id },
-						);
+						// IF the guild isn't in the database yet add it otherwise update the existing reccord.
+						if (!res) {
+							await db.run(
+								"INSERT INTO guilds (discord_id, logging_enabled, auto_moderation_enabled, anti_raid_enabled) VALUES ($id, 1, 1, 0)",
+								{ $id: interaction.guild.id },
+							);
+						} else {
+							await db.run(
+								"UPDATE guilds SET logging_enabled=1, auto_moderation_enabled=1 WHERE discord_id=$id",
+								{ $id: interaction.guild.id },
+							);
+						}
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
@@ -395,7 +397,7 @@ slashCommands.set("settings", {
 									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**.",
 								ephemeral: true,
 							});
-						const body = `Antiraid is currently **${
+						const body = `Automoderation is **${
 							res["anti_raid_enabled"] === 1
 								? "enabled"
 								: "disabled"
@@ -425,16 +427,18 @@ slashCommands.set("settings", {
 							"SELECT logging_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
-						if (!res)
-							return interaction.reply({
-								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to enable features that require message logging, you'll need to op-in via `/opintologging`",
-								ephemeral: true,
-							});
-						await db.run(
-							"UPDATE guilds SET logging_enabled=1, anti_raid_enabled=1 WHERE discord_id=$id",
-							{ $id: interaction.guild.id },
-						);
+						// IF the guild isn't in the database yet add it otherwise update the existing reccord.
+						if (!res) {
+							await db.run(
+								"INSERT INTO guilds (discord_id, logging_enabled, auto_moderation_enabled, anti_raid_enabled) VALUES ($id, 1, 0, 1)",
+								{ $id: interaction.guild.id },
+							);
+						} else {
+							await db.run(
+								"UPDATE guilds SET logging_enabled=1, anti_raid_enabled=1 WHERE discord_id=$id",
+								{ $id: interaction.guild.id },
+							);
+						}
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
@@ -468,7 +472,7 @@ slashCommands.set("settings", {
 							});
 						// If anti-raid is also disabled, then we can disable logging entirely
 						const should_logging_be_disabled =
-							res["auto_moderation_enabled"] === 0;
+							res["anti_raid_enabled"] === 0;
 						if (should_logging_be_disabled) {
 							await db.run(
 								"UPDATE guilds SET logging_enabled=0, auto_moderation_enabled=0 WHERE discord_id=$id",
@@ -485,7 +489,7 @@ slashCommands.set("settings", {
 								new MessageEmbed()
 									.setColor("RED")
 									.setDescription(
-										"Antiraid is now **disabled** for this guild.",
+										"Automoderation is now **disabled** for this guild.",
 									)
 									.setFooter(
 										should_logging_be_disabled
