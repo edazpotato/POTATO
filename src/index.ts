@@ -1,9 +1,9 @@
 import * as dotenv from "dotenv";
 
-import { createClient, registerEventListeners, start } from "./bot";
+import { createClient, registerEventListeners, start } from "./misc/bot";
 
-import { missingEnvVarError } from "./utils";
-import { openDatabase } from "./utils";
+import { missingEnvVarError } from "./misc/utils";
+import { openDatabase } from "./misc/utils";
 
 dotenv.config();
 (async () => {

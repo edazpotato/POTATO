@@ -1,4 +1,4 @@
-import { ApplicationCommandType, DatabaseType } from "../../types";
+import { ApplicationCommandType, DatabaseType } from "../../misc/types";
 import {
 	Collection,
 	GuildMember,
@@ -11,7 +11,7 @@ import {
 
 import { SlashCommandBuilder } from "@discordjs/builders";
 import jokes from "../../../data/jokes.json";
-import { onlineTimstamp } from "../../utils";
+import { onlineTimstamp } from "../../misc/utils";
 import packageJSON from "../../../package.json";
 
 const slashCommands = new Collection<string, ApplicationCommandType>();

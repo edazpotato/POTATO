@@ -1,10 +1,10 @@
 import { Client, Intents, Interaction } from "discord.js";
-import { messageCommands, slashCommands, userCommands } from "./commands";
+import { messageCommands, slashCommands, userCommands } from "../commands";
 
 import { Database } from "sqlite";
 import { Client as StatcordClient } from "statcord.js";
 import { AutoPoster as TopGGAutoPoster } from "topgg-autoposter";
-import { buttonHandlers } from "./messageComponentHandlers";
+import { buttonHandlers } from "../messageComponentHandlers";
 import sqlite3 from "sqlite3";
 
 export function createClient(

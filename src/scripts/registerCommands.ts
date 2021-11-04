@@ -4,11 +4,15 @@ import {
 	RESTGetAPIOAuth2CurrentApplicationResult,
 	Routes,
 } from "discord-api-types/v9";
-import { messageCommands, slashCommands, userCommands } from "./commands/index";
+import {
+	messageCommands,
+	slashCommands,
+	userCommands,
+} from "../commands/index";
 
 import Collection from ".pnpm/@discordjs+collection@0.2.1/node_modules/@discordjs/collection";
 import { REST } from "@discordjs/rest";
-import { missingEnvVarError } from "./utils";
+import { missingEnvVarError } from "../misc/utils";
 
 const contextMenuCommands = new Collection([
 	...messageCommands,

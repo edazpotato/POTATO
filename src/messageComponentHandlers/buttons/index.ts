@@ -1,6 +1,6 @@
 import { Collection, Interaction, Message, MessageEmbed } from "discord.js";
 
-import { DatabaseType } from "../../types";
+import { DatabaseType } from "../../misc/types";
 
 const buttonHandlers = new Collection<
 	string,

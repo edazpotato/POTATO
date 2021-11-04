@@ -5,7 +5,6 @@ import sqlite3 from "sqlite3";
 
 // import Git from "nodegit";
 
-
 export function missingEnvVarError(
 	variable: string,
 	whereToGetTokenFrom: string,
