@@ -19,7 +19,10 @@ const cluster = require("cluster");
 module.exports = class extends BaseCluster {
 	clusterID?: number = cluster.isWorker ? cluster.worker.id : undefined;
 	launch() {
-		log(`Launching`, { shard: this.id, cluster: this.clusterID });
+		log(`Launching`, {
+			shard: this.client.shard?.id,
+			cluster: this.id,
+		});
 		dotenv.config();
 		openDatabase().then((db) => {
 			const TOKENS = {
@@ -65,7 +68,10 @@ module.exports = class extends BaseCluster {
 			// this.registerEventListeners(db, statcord, topGGPoster);
 			this.registerEventListeners(db, topGGAPI);
 
-			log("Logging in", { shard: this.id, cluster: this.clusterID });
+			log("Logging in", {
+				shard: this.client.shard?.id,
+				cluster: this.id,
+			});
 			this.client.login(TOKENS.DISCORD);
 		});
 	}
@@ -77,7 +83,10 @@ module.exports = class extends BaseCluster {
 	) {
 		let topGGPosterInterval;
 		this.client.on("ready", () => {
-			log("Ready", { shard: this.id, cluster: this.clusterID });
+			log("Ready", {
+				shard: this.client.shard?.id,
+				cluster: this.id,
+			});
 			// statcord && statcord.autopost();
 			if (topGGAPI) {
 				// Arrow function because of this (the keyword) madnees
@@ -91,12 +100,12 @@ module.exports = class extends BaseCluster {
 						.postStats({
 							serverCount: guildCount.reduce((a, b) => a + b, 0), // Sum items in array
 							shardCount: this.client.shard?.shardCount,
-							shardId: this.id,
+							shardId: this.client.shard?.id,
 						})
 						.then(() => {
 							log("Posted stats to Top.GG", {
-								shard: this.id,
-								cluster: this.clusterID,
+								shard: this.client.shard?.id,
+								cluster: this.id,
 							});
 						});
 				};
@@ -113,20 +122,20 @@ module.exports = class extends BaseCluster {
 					name: `for /help | ${this.id + 1}/${
 						this.client.shard?.shardCount || this.manager.shardCount
 					}${
-						this.clusterID
-							? ` | ${this.clusterID}/${this.manager.clusterCount}`
+						this.id
+							? ` | ${this.id}/${this.manager.clusterCount}`
 							: ""
 					}`,
 					url: "https://potato.edaz.codes/",
 				});
 				log("Set status message", {
-					shard: this.id,
-					cluster: this.clusterID,
+					shard: this.client.shard?.id,
+					cluster: this.id,
 				});
 			} catch (e) {
 				log("Error setting status: " + e, {
-					shard: this.id,
-					cluster: this.clusterID,
+					shard: this.client.shard?.id,
+					cluster: this.id,
 				});
 			}
 		});
@@ -153,8 +162,8 @@ module.exports = class extends BaseCluster {
 						}
 					} catch (error) {
 						log("Error handling slash command", {
-							shard: this.id,
-							cluster: this.clusterID,
+							shard: this.client.shard?.id,
+							cluster: this.id,
 						});
 						try {
 							await interaction.reply({
@@ -220,8 +229,8 @@ module.exports = class extends BaseCluster {
 		// });
 
 		log("Registered listeners", {
-			shard: this.id,
-			cluster: this.clusterID,
+			shard: this.client.shard?.id,
+			cluster: this.id,
 		});
 	}
 };
