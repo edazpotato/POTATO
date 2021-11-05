@@ -9,7 +9,6 @@ dotenv.config();
 
 const TOKENS = {
 	DISCORD: process.env.DISCORD_TOKEN, // Required. Get your token from https://discord.com/developers/applications
-	STATCORD: process.env.STATCORD_TOKEN, // Required. Get your token from https://statcord.com/
 	HYPIXEL: process.env.HYPIXEL_TOKEN, // Required. Get your token in Minecraft on mc.hypixel.net by running /api
 	TOP_GG: process.env.TOP_GG_TOKEN, // Optional. Get your token from https://top.gg/
 	TESTING_GUILD_ID: process.env.TESTING_GUILD_ID, // Optional. If set, bot is considered to be in development mode.
@@ -20,8 +19,7 @@ if (!TOKENS.DISCORD)
 		"DISCORD_TOKEN",
 		"from https://discord.com/developers/applications",
 	);
-if (!TOKENS.STATCORD)
-	throw missingEnvVarError("STATCORD_TOKEN", "from https://statcord.com/");
+
 if (!TOKENS.HYPIXEL)
 	throw missingEnvVarError(
 		"HYPIXEL_TOKEN",

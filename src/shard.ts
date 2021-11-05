@@ -9,7 +9,6 @@ import { messageCommands, slashCommands, userCommands } from "./commands";
 import { BaseCluster } from "kurasuta";
 import { Database } from "sqlite";
 import { Interaction } from "discord.js";
-import { Client as StatcordClient } from "statcord.js";
 import { Api as TopGGAPI } from "@top-gg/sdk";
 import { buttonHandlers } from "./messageComponentHandlers";
 import sqlite3 from "sqlite3";
@@ -29,7 +28,6 @@ module.exports = class extends BaseCluster {
 		openDatabase().then((db) => {
 			const TOKENS = {
 				DISCORD: process.env.DISCORD_TOKEN, // Required. Get your token from https://discord.com/developers/applications
-				STATCORD: process.env.STATCORD_TOKEN, // Required. Get your token from https://statcord.com/
 				HYPIXEL: process.env.HYPIXEL_TOKEN, // Required. Get your token in Minecraft on mc.hypixel.net by running /api
 				TOP_GG: process.env.TOP_GG_TOKEN, // Optional. Get your token from https://top.gg/
 			};
@@ -39,11 +37,7 @@ module.exports = class extends BaseCluster {
 					"DISCORD_TOKEN",
 					"from https://discord.com/developers/applications",
 				);
-			if (!TOKENS.STATCORD)
-				throw missingEnvVarError(
-					"STATCORD_TOKEN",
-					"from https://statcord.com/",
-				);
+
 			if (!TOKENS.HYPIXEL)
 				throw missingEnvVarError(
 					"HYPIXEL_TOKEN",
@@ -53,21 +47,6 @@ module.exports = class extends BaseCluster {
 			let topGGAPI: TopGGAPI | undefined = undefined;
 			if (TOKENS.TOP_GG) topGGAPI = new TopGGAPI(TOKENS.TOP_GG);
 
-			const clientTemp = this.client;
-			// const statcord = !developmentMode
-			// 	? new StatcordClient({
-			// 			client: clientTemp,
-			// 			key: TOKENS.STATCORD,
-			// 	  })
-			// 	: undefined;
-
-			// const topGGPoster = !developmentMode
-			// 	? TOKENS.TOP_GG
-			// 		? TopGGAutoPoster(TOKENS.TOP_GG, this.client)
-			// 		: undefined
-			// 	: undefined;
-
-			// this.registerEventListeners(db, statcord, topGGPoster);
 			this.registerEventListeners(db, topGGAPI);
 
 			log("Logging in", {
@@ -81,7 +60,6 @@ module.exports = class extends BaseCluster {
 	registerEventListeners(
 		db: Database<sqlite3.Database, sqlite3.Statement>,
 		topGGAPI?: TopGGAPI,
-		statcord?: StatcordClient,
 	) {
 		let topGGPosterInterval;
 		this.client.on("ready", () => {
@@ -89,7 +67,6 @@ module.exports = class extends BaseCluster {
 				shard: this.client.shard?.id,
 				cluster: this.clusterID,
 			});
-			// statcord && statcord.autopost();
 			if (topGGAPI) {
 				// Arrow function because of this (the keyword) madnees
 				const postStats = async () => {
@@ -157,11 +134,6 @@ module.exports = class extends BaseCluster {
 				if (interaction.isCommand()) {
 					const command = slashCommands.get(interaction.commandName);
 					if (!command) return;
-					// statcord &&
-					// 	statcord.postCommand(
-					// 		command.discordData.name,
-					// 		interaction.user.id,
-					// 	);
 					try {
 						await command.handler(interaction, db);
 						// If it hasn't had a reply or been deffered...
@@ -221,24 +193,6 @@ module.exports = class extends BaseCluster {
 				}
 			},
 		);
-
-		// Commmented out until I implement a full custom system because of epic gamer sharding
-		// statcord &&
-		// 	statcord.on("autopost-start", () => {
-		// 		log("Started posting stats to ", this.id);
-		// 	});
-		// statcord &&
-		// 	statcord.on("post", (error) => {
-		// 		if (!error) {
-		// 			console.info("Successfuly posted statistics to Statcord.");
-		// 		} else {
-		// 			console.error(error);
-		// 		}
-		// 	});
-
-		// topGGPoster?.on("posted", (stats) => {
-		// 	console.log(`Posted stats to Top.gg | ${stats.serverCount} guilds`);
-		// });
 
 		log("Registered listeners", {
 			shard: this.client.shard?.id,
