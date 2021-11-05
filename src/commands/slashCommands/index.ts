@@ -163,6 +163,7 @@ slashCommands.set("vote", {
 	},
 });
 slashCommands.set("deletemydata", {
+	experimental: true,
 	discordData: new SlashCommandBuilder()
 		.setName("deletemydata")
 		.setDescription(
@@ -212,6 +213,7 @@ slashCommands.set("deletemydata", {
 	},
 });
 slashCommands.set("settings", {
+	experimental: true,
 	discordData: new SlashCommandBuilder()
 		.setName("settings")
 		.setDescription("Change my settings for this guild!")
