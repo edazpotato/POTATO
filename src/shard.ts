@@ -93,20 +93,18 @@ module.exports = class extends BaseCluster {
 			if (topGGAPI) {
 				// Arrow function because of this (the keyword) madnees
 				const postStats = async () => {
-					const guildCount = (await this.manager.fetchClientValues(
-						"guilds.cache.size",
-					)) as number[];
+					const guildCount =
+						(await this.client.shard?.fetchClientValues(
+							"guilds.cache.size",
+						)) as number[];
+					log(
+						`Guild count: ${guildCount.reduce((a, b) => a + b, 0)}`,
+						{
+							shard: this.client.shard?.id,
+							cluster: this.clusterID,
+						},
+					);
 					if (!developmentMode) {
-						log(
-							`Guild count: ${guildCount.reduce(
-								(a, b) => a + b,
-								0,
-							)}`,
-							{
-								shard: this.client.shard?.id,
-								cluster: this.clusterID,
-							},
-						);
 						topGGAPI
 							.postStats({
 								serverCount: guildCount.reduce(
