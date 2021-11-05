@@ -134,7 +134,7 @@ and I came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
 					)
 					.addField(
 						"Package versions",
-						`I'm using Node.js version ${process.version},
+						`I'm using Node.js version \`${process.version}\`,
 [\`discord.js\`](https://www.npmjs.com/package/discord.js) version \`${packageJSON.dependencies[
 							"discord.js"
 						].slice(1)}\`,
