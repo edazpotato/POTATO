@@ -97,6 +97,16 @@ module.exports = class extends BaseCluster {
 						"guilds.cache.size",
 					)) as number[];
 					if (!developmentMode) {
+						log(
+							`Guild count: ${guildCount.reduce(
+								(a, b) => a + b,
+								0,
+							)}`,
+							{
+								shard: this.client.shard?.id,
+								cluster: this.clusterID,
+							},
+						);
 						topGGAPI
 							.postStats({
 								serverCount: guildCount.reduce(
