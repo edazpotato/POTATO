@@ -93,10 +93,9 @@ module.exports = class extends BaseCluster {
 			if (topGGAPI) {
 				// Arrow function because of this (the keyword) madnees
 				const postStats = async () => {
-					const guildCount =
-						(await this.client.shard?.fetchClientValues(
-							"guilds.cache.size",
-						)) as number[];
+					const guildCount = (await this.manager.fetchClientValues(
+						"guilds.cache.size",
+					)) as number[];
 					if (!developmentMode) {
 						topGGAPI
 							.postStats({
