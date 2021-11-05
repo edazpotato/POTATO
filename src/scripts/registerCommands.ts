@@ -5,6 +5,10 @@ import {
 	Routes,
 } from "discord-api-types/v9";
 import {
+	SlashCommandBuilder,
+	SlashCommandSubcommandsOnlyBuilder,
+} from "@discordjs/builders";
+import {
 	messageCommands,
 	slashCommands,
 	userCommands,
@@ -66,9 +70,11 @@ async function registerSlashCommands(
 		for (const guild of experimentGuilds) {
 			await rest.put(Routes.applicationGuildCommands(botData.id, guild), {
 				body: experimentalCommands.map((command) => {
-					command.discordData.setName(
-						`[Experiment] ${command.discordData.name}`,
-					);
+					if ("description" in command.discordData) {
+						command.discordData.setDescription(
+							"[EXPERIMENT] " + command.discordData.description,
+						);
+					}
 					return command.discordData.toJSON();
 				}),
 			});

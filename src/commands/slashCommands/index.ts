@@ -14,6 +14,8 @@ import jokes from "../../../data/jokes.json";
 import { onlineTimstamp } from "../../misc/utils";
 import packageJSON from "../../../package.json";
 
+const cluster = require("cluster");
+
 const slashCommands = new Collection<string, ApplicationCommandType>();
 
 slashCommands.set("help", {
@@ -109,6 +111,13 @@ slashCommands.set("debug", {
 				new MessageEmbed()
 					.setTitle("Debug")
 					.setColor("RED")
+					.setFooter(
+						`Shard ${interaction.client.shard?.id || 0 + 1}/${
+							interaction.client.shard?.shardCount
+						}, cluster ${
+							cluster.isWorker ? cluster.worker.id : 1
+						}/${interaction.client.shard?.clusterCount || 1}.`,
+					)
 					// 					.addField(
 					// 						"Git commit",
 					// 						`Hash: ${gitCommit.hash.short}
@@ -129,7 +138,9 @@ slashCommands.set("debug", {
 					.addField(
 						"Metrics",
 						`I have \`${jokes.length}\` jokes,
-I've got \`${interaction.client.guilds.cache.size}\` guilds cached,
+I've got \`${interaction.client.guilds.cache.size}\` guild${
+							interaction.client.guilds.cache.size > 1 ? "s" : ""
+						} cached,
 and I came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
 					)
 					.addField(
