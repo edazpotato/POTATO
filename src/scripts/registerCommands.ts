@@ -65,9 +65,12 @@ async function registerSlashCommands(
 	if (experimentalCommands.size > 0) {
 		for (const guild of experimentGuilds) {
 			await rest.put(Routes.applicationGuildCommands(botData.id, guild), {
-				body: experimentalCommands.map((command) =>
-					command.discordData.toJSON(),
-				),
+				body: experimentalCommands.map((command) => {
+					command.discordData.setName(
+						`[Experiment] ${command.discordData.name}`,
+					);
+					return command.discordData.toJSON();
+				}),
 			});
 		}
 		console.info("Registered experimental commands to ", experimentGuilds);
