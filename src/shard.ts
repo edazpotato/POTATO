@@ -89,11 +89,10 @@ module.exports = class extends BaseCluster {
 					url: "https://potato.edaz.codes/",
 				});
 			} catch (e) {
-				log(
-					"Error setting status",
-					{ shard: this.id, cluster: this.clusterID },
-					e,
-				);
+				log("Error setting status: " + e, {
+					shard: this.id,
+					cluster: this.clusterID,
+				});
 			}
 		});
 		this.client.on(
