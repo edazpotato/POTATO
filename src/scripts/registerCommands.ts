@@ -38,7 +38,7 @@ if (TESTING_GUILD_ID) {
 	);
 }
 
-const experimentGuilds = ["713212880316792882", "648777120700432384"];
+const experimentGuilds = ["648777120700432384"];
 
 const rest = new REST({ version: "9" }).setToken(TOKEN);
 
