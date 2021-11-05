@@ -144,15 +144,18 @@ module.exports = class extends BaseCluster {
 								ephemeral: true,
 							});
 						}
-					} catch (error) {
-						log("Error handling slash command", {
+					} catch (error: any) {
+						log("Error handling slash command: " + error, {
 							shard: this.client.shard?.id,
 							cluster: this.clusterID,
 						});
 						try {
 							await interaction.reply({
 								content:
-									"There was an error while executing this command!",
+									"There was an error while executing this command" +
+									(developmentMode
+										? `: ${error?.stack || error}`
+										: "!"),
 								ephemeral: true,
 							});
 						} catch (e) {}

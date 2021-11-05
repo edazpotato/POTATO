@@ -18,3 +18,7 @@ export type ApplicationCommandType = {
 };
 
 export type DatabaseType = Database<sqlite3.Database, sqlite3.Statement>;
+
+export type DatabaseResponseType =
+	| { [x: string]: string | number | null }
+	| undefined;

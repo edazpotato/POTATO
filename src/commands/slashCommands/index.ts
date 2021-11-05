@@ -1,4 +1,8 @@
-import { ApplicationCommandType, DatabaseType } from "../../misc/types";
+import {
+	ApplicationCommandType,
+	DatabaseResponseType,
+	DatabaseType,
+} from "../../misc/types";
 import {
 	Collection,
 	Interaction,
@@ -189,7 +193,7 @@ slashCommands.set("deletemydata", {
 			)
 				return interaction.reply({
 					content:
-						"To request deletion of all the data stored about you Discord account, run this command in DMs with me. If you're trying to request deletion of the guild's data, ensure that you have the `manage server` permission.",
+						"To request deletion of all the data stored about you specifc Discord account, run this command in DMs with me. If you're trying to request deletion of the guild's data, ensure that you have the `manage server` permission.",
 					ephemeral: true,
 				});
 			return interaction.reply({
@@ -197,10 +201,7 @@ slashCommands.set("deletemydata", {
 					new MessageEmbed()
 						.setColor("RED")
 						.setDescription(
-							"Are you sure that you want to request deletion all of the data about this guild that I have stored? Deleting stored guild data will likely result in worse performance of my automoderation and antiraid systems.",
-						)
-						.setFooter(
-							"Requesting stored guild data deletion does not stop more data from being collected by me. To stop any more data from being collected, use the /settings command.",
+							"Are you sure that you want to request deletion all of the data that I have stored about this guild? Deleting stored guild data will remove this guild from the databse, disabling my automoderation and antiraid systems in the process.",
 						),
 				],
 				components: [
@@ -218,7 +219,28 @@ slashCommands.set("deletemydata", {
 			});
 		}
 		return interaction.reply({
-			content: "Soon™",
+			embeds: [
+				new MessageEmbed()
+					.setColor("RED")
+					.setDescription(
+						"Are you sure that you want to request deletion all of the data that I have stored about you? Deleting stored user data will likely result in worse performance of my automoderation and antiraid systems.",
+					)
+					.setFooter(
+						"Requesting stored user data deletion does not stop more data from being collected by me. To stop any more data from being collected, ask a guild admin to disable all data collection systems via the /settings command.",
+					),
+			],
+			components: [
+				new MessageActionRow().addComponents(
+					new MessageButton()
+						.setCustomId("cancel")
+						.setStyle("SECONDARY")
+						.setLabel("Cancel"),
+					new MessageButton()
+						.setCustomId("delete_user_data")
+						.setStyle("DANGER")
+						.setLabel("Request user data deletion"),
+				),
+			],
 		});
 	},
 });
@@ -230,12 +252,14 @@ slashCommands.set("settings", {
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("automoderation")
-				.setDescription("Enable or disable my automoderation system.")
+				.setDescription(
+					"Enable or disable my automoderation system in this guild.",
+				)
 				.addStringOption((option) =>
 					option
 						.setName("action")
 						.setDescription(
-							"What action do you want to perform on my automoderation setting?",
+							"What action do you want to perform on this guild's automoderation setting?",
 						)
 						.setRequired(true)
 						.addChoice("View status", "status")
@@ -246,12 +270,14 @@ slashCommands.set("settings", {
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("antiraid")
-				.setDescription("Enable or disable my antiraid system.")
+				.setDescription(
+					"Enable or disable my antiraid system in this guild.",
+				)
 				.addStringOption((option) =>
 					option
 						.setName("action")
 						.setDescription(
-							"What action do you want to perform on my antiraid setting?",
+							"What action do you want to perform on this guild's antiraid setting?",
 						)
 						.setRequired(true)
 						.addChoice("View status", "status")
@@ -263,7 +289,7 @@ slashCommands.set("settings", {
 		if (!interaction.isCommand()) return;
 		if (!interaction.inCachedGuild())
 			return interaction.reply({
-				content: "Sorry, you can only use this in a guild channel :(",
+				content: "Sorry, you can only use this in a guild channel.",
 				ephemeral: true,
 			});
 
@@ -311,10 +337,11 @@ slashCommands.set("settings", {
 									"In order to do that, you need to be a guild overlord.",
 								ephemeral: true,
 							});
-						const res = await db.get(
+						let res: DatabaseResponseType = await db.get(
 							"SELECT logging_enabled, auto_moderation_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
+
 						// IF the guild isn't in the database yet add it otherwise update the existing reccord.
 						if (!res) {
 							await db.run(
@@ -335,6 +362,7 @@ slashCommands.set("settings", {
 									.setColor("RED")
 									.setDescription(
 										`Automoderation ${
+											res &&
 											res["auto_moderation_enabled"]
 												? "was already"
 												: "is now"
@@ -342,7 +370,9 @@ slashCommands.set("settings", {
 									)
 									.setFooter(
 										`This guild's messages are ${
-											res["logging_enabled"] ? "" : "now"
+											res && res["logging_enabled"]
+												? ""
+												: "now"
 										} being logged.`,
 									),
 							],
@@ -363,7 +393,7 @@ slashCommands.set("settings", {
 						if (!res)
 							return interaction.reply({
 								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to enable features that require message logging, you'll need to op-in via `/opintologging`",
+									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to use features that require message logging, a guild admin will need to enable them with the `/setting` command",
 								ephemeral: true,
 							});
 						// If anti-raid is also disabled, then we can disable logging entirely
@@ -450,7 +480,7 @@ slashCommands.set("settings", {
 									"In order to do that, you need to be a guild overlord.",
 								ephemeral: true,
 							});
-						const res = await db.get(
+						const res: DatabaseResponseType = await db.get(
 							"SELECT logging_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
@@ -474,14 +504,16 @@ slashCommands.set("settings", {
 									.setColor("RED")
 									.setDescription(
 										`Antiraid ${
-											res["anti_raid_enabled"]
+											res && res["anti_raid_enabled"]
 												? "was already"
 												: "is now"
 										} **enabled** for this guild.`,
 									)
 									.setFooter(
 										`This guild's messages are ${
-											res["logging_enabled"] ? "" : "now"
+											res && res["logging_enabled"]
+												? ""
+												: "now"
 										} being logged.`,
 									),
 							],
@@ -502,7 +534,7 @@ slashCommands.set("settings", {
 						if (!res)
 							return interaction.reply({
 								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to enable features that require message logging, you'll need to op-in via `/opintologging`",
+									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to use features that require message logging, a guild admin will need to enable them with the `/setting` command.",
 								ephemeral: true,
 							});
 						// If anti-raid is also disabled, then we can disable logging entirely
