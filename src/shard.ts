@@ -10,7 +10,7 @@ import { BaseCluster } from "kurasuta";
 import { Database } from "sqlite";
 import { Interaction } from "discord.js";
 import { Client as StatcordClient } from "statcord.js";
-import { AutoPoster as TopGGAutoPoster } from "topgg-autoposter";
+import { Api as TopGGAPI } from "@top-gg/sdk";
 import { buttonHandlers } from "./messageComponentHandlers";
 import sqlite3 from "sqlite3";
 
@@ -26,6 +26,7 @@ module.exports = class extends BaseCluster {
 				DISCORD: process.env.DISCORD_TOKEN, // Required. Get your token from https://discord.com/developers/applications
 				STATCORD: process.env.STATCORD_TOKEN, // Required. Get your token from https://statcord.com/
 				HYPIXEL: process.env.HYPIXEL_TOKEN, // Required. Get your token in Minecraft on mc.hypixel.net by running /api
+				TOP_GG: process.env.TOP_GG_TOKEN, // Optional. Get your token from https://top.gg/
 			};
 
 			if (!TOKENS.DISCORD)
@@ -43,7 +44,9 @@ module.exports = class extends BaseCluster {
 					"HYPIXEL_TOKEN",
 					"in game in Minecraft on mc.hypixel.net by running the /api command.",
 				);
-			process.env.DISCORD_TOKEN;
+
+			let topGGAPI: TopGGAPI | undefined = undefined;
+			if (TOKENS.TOP_GG) topGGAPI = new TopGGAPI(TOKENS.TOP_GG);
 
 			const clientTemp = this.client;
 			// const statcord = !developmentMode
@@ -60,7 +63,7 @@ module.exports = class extends BaseCluster {
 			// 	: undefined;
 
 			// this.registerEventListeners(db, statcord, topGGPoster);
-			this.registerEventListeners(db);
+			this.registerEventListeners(db, topGGAPI);
 
 			log("Logging in", { shard: this.id, cluster: this.clusterID });
 			this.client.login(TOKENS.DISCORD);
@@ -69,12 +72,40 @@ module.exports = class extends BaseCluster {
 
 	registerEventListeners(
 		db: Database<sqlite3.Database, sqlite3.Statement>,
+		topGGAPI?: TopGGAPI,
 		statcord?: StatcordClient,
-		topGGPoster?: ReturnType<typeof TopGGAutoPoster>,
 	) {
+		let topGGPosterInterval;
 		this.client.on("ready", () => {
 			log("Ready", { shard: this.id, cluster: this.clusterID });
 			// statcord && statcord.autopost();
+			if (topGGAPI) {
+				// Arrow function because of this (the keyword) madnees
+				const postStats = async () => {
+					const guildCount =
+						(await this.client.shard?.fetchClientValues(
+							"guilds.cache.size",
+						)) as number[];
+
+					topGGAPI
+						.postStats({
+							serverCount: guildCount.reduce((a, b) => a + b, 0), // Sum items in array
+							shardCount: this.client.shard?.shardCount,
+							shardId: this.id,
+						})
+						.then(() => {
+							log("Posted stats to Top.GG", {
+								shard: this.id,
+								cluster: this.clusterID,
+							});
+						});
+				};
+				topGGPosterInterval = setInterval(() => {
+					postStats();
+				}, 15 * 60 * 1000); // Every 15 minutes
+				postStats();
+			}
+
 			try {
 				this.client.user?.setActivity({
 					shardId: this.id,

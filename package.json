@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@discordjs/builders": "^0.7.0",
 		"@discordjs/rest": "^0.1.0-canary.0",
+		"@top-gg/sdk": "^3.1.2",
 		"bufferutil": "^4.0.5",
 		"discord.js": "^13.3.1",
 		"dotenv": "^10.0.0",
@@ -31,7 +32,6 @@
 		"sqlite": "^4.0.23",
 		"sqlite3": "^5.0.2",
 		"statcord.js": "^3.3.0",
-		"topgg-autoposter": "^2.0.0",
 		"typescript": "^4.4.4",
 		"utf-8-validate": "^5.0.7",
 		"zlib-sync": "^0.1.7"

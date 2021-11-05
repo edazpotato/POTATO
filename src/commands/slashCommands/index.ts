@@ -1,7 +1,6 @@
 import { ApplicationCommandType, DatabaseType } from "../../misc/types";
 import {
 	Collection,
-	GuildMember,
 	Interaction,
 	MessageActionRow,
 	MessageButton,
