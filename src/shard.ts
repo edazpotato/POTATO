@@ -80,7 +80,7 @@ module.exports = class extends BaseCluster {
 					shardId: this.id,
 					type: "WATCHING",
 					name: `for /help | ${this.id + 1}/${
-						this.manager.shardCount
+						this.client.shard?.shardCount || this.manager.shardCount
 					}${
 						this.clusterID
 							? ` | ${this.clusterID}/${this.manager.clusterCount}`
