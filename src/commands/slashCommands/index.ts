@@ -244,47 +244,49 @@ slashCommands.set("deletemydata", {
 		});
 	},
 });
+const settingDiscordData = new SlashCommandBuilder()
+	.setName("settings")
+	.setDescription("Change my settings for this guild!");
+settingDiscordData
+	.addSubcommand((subcommand) =>
+		subcommand
+			.setName("automoderation")
+			.setDescription(
+				"Enable or disable my automoderation system in this guild.",
+			)
+			.addStringOption((option) =>
+				option
+					.setName("action")
+					.setDescription(
+						"What action do you want to perform on this guild's automoderation setting?",
+					)
+					.setRequired(true)
+					.addChoice("View status", "status")
+					.addChoice("Enable", "enable")
+					.addChoice("Disable", "disable"),
+			),
+	)
+	.addSubcommand((subcommand) =>
+		subcommand
+			.setName("antiraid")
+			.setDescription(
+				"Enable or disable my antiraid system in this guild.",
+			)
+			.addStringOption((option) =>
+				option
+					.setName("action")
+					.setDescription(
+						"What action do you want to perform on this guild's antiraid setting?",
+					)
+					.setRequired(true)
+					.addChoice("View status", "status")
+					.addChoice("Enable", "enable")
+					.addChoice("Disable", "disable"),
+			),
+	);
 slashCommands.set("settings", {
 	experimental: true,
-	discordData: new SlashCommandBuilder()
-		.setName("settings")
-		.setDescription("Change my settings for this guild!")
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("automoderation")
-				.setDescription(
-					"Enable or disable my automoderation system in this guild.",
-				)
-				.addStringOption((option) =>
-					option
-						.setName("action")
-						.setDescription(
-							"What action do you want to perform on this guild's automoderation setting?",
-						)
-						.setRequired(true)
-						.addChoice("View status", "status")
-						.addChoice("Enable", "enable")
-						.addChoice("Disable", "disable"),
-				),
-		)
-		.addSubcommand((subcommand) =>
-			subcommand
-				.setName("antiraid")
-				.setDescription(
-					"Enable or disable my antiraid system in this guild.",
-				)
-				.addStringOption((option) =>
-					option
-						.setName("action")
-						.setDescription(
-							"What action do you want to perform on this guild's antiraid setting?",
-						)
-						.setRequired(true)
-						.addChoice("View status", "status")
-						.addChoice("Enable", "enable")
-						.addChoice("Disable", "disable"),
-				),
-		),
+	discordData: settingDiscordData,
 	handler: async (interaction: Interaction, db: DatabaseType) => {
 		if (!interaction.isCommand()) return;
 		if (!interaction.inCachedGuild())
