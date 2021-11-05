@@ -1,6 +1,6 @@
 import { Collection, Interaction, MessageEmbed } from "discord.js";
 
-import { ApplicationCommandType } from "../../types";
+import { ApplicationCommandType } from "../../misc/types";
 
 const userCommands = new Collection<string, ApplicationCommandType>();
 

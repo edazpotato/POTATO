@@ -62,5 +62,5 @@ pnpm run register
 pnpm run start
 
 # Or with pm2
-pm2 start dist/src/index.js --name "POTATO V3"
+pm2 start dist/src/sharder.js --name "POTATO V3.1"
 ```

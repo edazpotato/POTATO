@@ -4,11 +4,15 @@ import {
 	RESTGetAPIOAuth2CurrentApplicationResult,
 	Routes,
 } from "discord-api-types/v9";
-import { messageCommands, slashCommands, userCommands } from "./commands/index";
+import {
+	messageCommands,
+	slashCommands,
+	userCommands,
+} from "../commands/index";
 
-import Collection from ".pnpm/@discordjs+collection@0.2.1/node_modules/@discordjs/collection";
+import { Collection } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { missingEnvVarError } from "./utils";
+import { missingEnvVarError } from "../misc/utils";
 
 const contextMenuCommands = new Collection([
 	...messageCommands,
@@ -26,7 +30,7 @@ if (!TOKEN)
 const TESTING_GUILD_ID = process.env.TESTING_GUILD_ID;
 if (TESTING_GUILD_ID) {
 	console.info(
-		`TESTING_GUILD_ID provided. Only registering commands to ${TESTING_GUILD_ID}.`,
+		`TESTING_GUILD_ID provided. Only registering non-experimental commands to ${TESTING_GUILD_ID}.`,
 	);
 } else {
 	console.info(
@@ -34,20 +38,40 @@ if (TESTING_GUILD_ID) {
 	);
 }
 
+const experimentGuilds = ["713212880316792882", "648777120700432384"];
+
 const rest = new REST({ version: "9" }).setToken(TOKEN);
 
 async function registerSlashCommands(
 	botData: RESTGetAPIOAuth2CurrentApplicationResult,
 ) {
-	if (slashCommands.size < 1) return;
+	if (!(slashCommands.size > 0)) return;
+	// Normal commands
 	rest.put(
 		TESTING_GUILD_ID
 			? Routes.applicationGuildCommands(botData.id, TESTING_GUILD_ID)
 			: Routes.applicationCommands(botData.id),
 		{
-			body: slashCommands.map((command) => command.discordData.toJSON()),
+			body: slashCommands
+				.filter((command) => !command.experimental)
+				.map((command) => command.discordData.toJSON()),
 		},
-	).then(() => console.info("Registered slash commands."));
+	).then(() => console.info("Registered normal slash commands."));
+
+	// Experimental commands
+	const experimentalCommands = slashCommands.filter(
+		(command) => !!command.experimental,
+	);
+	if (experimentalCommands.size > 0) {
+		for (const guild of experimentGuilds) {
+			await rest.put(Routes.applicationGuildCommands(botData.id, guild), {
+				body: experimentalCommands.map((command) =>
+					command.discordData.toJSON(),
+				),
+			});
+		}
+		console.info("Registered experimental commands to ", experimentGuilds);
+	}
 }
 async function registerContextMenuCommands(
 	botData: RESTGetAPIOAuth2CurrentApplicationResult,

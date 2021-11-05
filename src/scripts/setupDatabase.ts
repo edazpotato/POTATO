@@ -1,4 +1,4 @@
-import { openDatabase } from "./utils";
+import { openDatabase } from "../misc/utils";
 
 openDatabase().then(async (db) => {
 	try {
@@ -15,5 +15,6 @@ openDatabase().then(async (db) => {
 	} catch (e) {
 		console.info('Error creating table "guilds".');
 	}
+
 	return;
 });
