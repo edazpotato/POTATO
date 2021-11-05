@@ -16,12 +16,14 @@ import sqlite3 from "sqlite3";
 
 const cluster = require("cluster");
 
+const developmentMode = !!process.env.TESTING_GUILD_ID;
+
 module.exports = class extends BaseCluster {
 	clusterID?: number = cluster.isWorker ? cluster.worker.id : undefined;
 	launch() {
 		log(`Launching`, {
 			shard: this.client.shard?.id,
-			cluster: this.id,
+			cluster: this.clusterID,
 		});
 		dotenv.config();
 		openDatabase().then((db) => {
@@ -70,7 +72,7 @@ module.exports = class extends BaseCluster {
 
 			log("Logging in", {
 				shard: this.client.shard?.id,
-				cluster: this.id,
+				cluster: this.clusterID,
 			});
 			this.client.login(TOKENS.DISCORD);
 		});
@@ -85,7 +87,7 @@ module.exports = class extends BaseCluster {
 		this.client.on("ready", () => {
 			log("Ready", {
 				shard: this.client.shard?.id,
-				cluster: this.id,
+				cluster: this.clusterID,
 			});
 			// statcord && statcord.autopost();
 			if (topGGAPI) {
@@ -95,24 +97,27 @@ module.exports = class extends BaseCluster {
 						(await this.client.shard?.fetchClientValues(
 							"guilds.cache.size",
 						)) as number[];
-
-					topGGAPI
-						.postStats({
-							serverCount: guildCount.reduce((a, b) => a + b, 0), // Sum items in array
-							shardCount: this.client.shard?.shardCount,
-							shardId: this.client.shard?.id,
-						})
-						.then(() => {
-							log("Posted stats to Top.GG", {
-								shard: this.client.shard?.id,
-								cluster: this.id,
+					if (!developmentMode) {
+						topGGAPI
+							.postStats({
+								serverCount: guildCount.reduce(
+									(a, b) => a + b,
+									0,
+								), // Sum items in array
+								shardCount: this.client.shard?.shardCount,
+								shardId: this.client.shard?.id,
+							})
+							.then(() => {
+								log("Posted stats to Top.GG", {
+									shard: this.client.shard?.id,
+									cluster: this.clusterID,
+								});
 							});
-						});
+					}
 				};
 				topGGPosterInterval = setInterval(() => {
 					postStats();
 				}, 15 * 60 * 1000); // Every 15 minutes
-				postStats();
 			}
 
 			try {
@@ -122,20 +127,20 @@ module.exports = class extends BaseCluster {
 					name: `for /help | ${this.id + 1}/${
 						this.client.shard?.shardCount || this.manager.shardCount
 					}${
-						this.id
-							? ` | ${this.id}/${this.manager.clusterCount}`
+						this.clusterID
+							? ` | ${this.clusterID}/${this.manager.clusterCount}`
 							: ""
 					}`,
 					url: "https://potato.edaz.codes/",
 				});
 				log("Set status message", {
 					shard: this.client.shard?.id,
-					cluster: this.id,
+					cluster: this.clusterID,
 				});
 			} catch (e) {
 				log("Error setting status: " + e, {
 					shard: this.client.shard?.id,
-					cluster: this.id,
+					cluster: this.clusterID,
 				});
 			}
 		});
@@ -163,7 +168,7 @@ module.exports = class extends BaseCluster {
 					} catch (error) {
 						log("Error handling slash command", {
 							shard: this.client.shard?.id,
-							cluster: this.id,
+							cluster: this.clusterID,
 						});
 						try {
 							await interaction.reply({
@@ -230,7 +235,7 @@ module.exports = class extends BaseCluster {
 
 		log("Registered listeners", {
 			shard: this.client.shard?.id,
-			cluster: this.id,
+			cluster: this.clusterID,
 		});
 	}
 };

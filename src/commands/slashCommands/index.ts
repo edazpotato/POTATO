@@ -111,7 +111,7 @@ slashCommands.set("debug", {
 					.setTitle("Debug")
 					.setColor("RED")
 					.setFooter(
-						`Shard ${interaction.client.shard?.id || 0 + 1}/${
+						`Shard ${(interaction.client.shard?.id || 0) + 1}/${
 							interaction.client.shard?.shardCount
 						}, cluster ${
 							cluster.isWorker ? cluster.worker.id : 1
