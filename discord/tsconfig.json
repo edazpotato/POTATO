@@ -9,11 +9,11 @@
 		"allowJs": true,
 		"checkJs": true,
 		"sourceMap": true,
-		"outDir": "discord/dist",
+		"outDir": "dist",
 		"strict": true,
 		"moduleResolution": "node",
 		"forceConsistentCasingInFileNames": true
 	},
 	"include": ["src/**/*", "data/*"],
-	"exclude": ["node_modules", "discord/dist"]
+	"exclude": ["node_modules", "dist"]
 }
