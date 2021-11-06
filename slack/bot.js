@@ -37,7 +37,10 @@ app.command("/joke", async (e) => {
 	await e.ack();
 	// console.log(e);
 	const joke = getRandomJoke();
-	await e.respond({ text: joke, response_type: "in_channel" });
+	await e.respond({
+		text: `<@${e.body.user_id}> ${joke}`,
+		response_type: "in_channel",
+	});
 });
 
 (async () => {
