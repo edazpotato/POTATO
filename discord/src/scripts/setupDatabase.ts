@@ -22,9 +22,8 @@ openDatabase().then(async (db) => {
 			"id"	INTEGER NOT NULL UNIQUE,
 			"timestamp"	INTEGER NOT NULL,
 			"memory_use"	INTEGER NOT NULL,
-			"memoray_total"	INTEGER NOT NULL,
-			"cpu_use"	INTEGER NOT NULL,
-			"cpu_total"	INTEGER NOT NULL,
+			"memory_total"	INTEGER NOT NULL,
+			"cpu_load"	INTEGER NOT NULL,
 			"bandwidth_use"	INTEGER NOT NULL,
 			PRIMARY KEY("id" AUTOINCREMENT)
 		);

@@ -1,0 +1,23 @@
+{
+	"name": "potato-slack",
+	"version": "1.0.0",
+	"description": "POTATO but slack",
+	"main": "bot.js",
+	"scripts": {
+		"start": "node bot.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/edazpotato/potato.git"
+	},
+	"author": "Edazpotato",
+	"license": "Unlicense",
+	"bugs": {
+		"url": "https://github.com/edazpotato/potato/issues"
+	},
+	"homepage": "https://github.com/edazpotato/potato#readme",
+	"dependencies": {
+		"@slack/bolt": "^3.8.1",
+		"dotenv": "^10.0.0"
+	}
+}
