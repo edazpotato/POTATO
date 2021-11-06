@@ -108,8 +108,8 @@ const sharder = new ShardingManager(join(__dirname, "shard"), {
 		presence: {
 			activities: [
 				{
-					type: "WATCHING",
-					name: "for /help",
+					type: "PLAYING",
+					name: "Starting...",
 					url: "https://potato.edaz.codes",
 				},
 			],
