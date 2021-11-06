@@ -16,7 +16,7 @@ if (!signingSecret)
 		"Need a slack signing secrete in env variable called SLACK_SIGNING_SECRET",
 	);
 
-const jokes = require("./jokes.json");
+const jokes = require("../jokes.json");
 
 const { App } = require("@slack/bolt");
 const app = new App({
