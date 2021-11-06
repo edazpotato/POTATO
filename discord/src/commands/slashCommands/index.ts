@@ -13,7 +13,7 @@ import {
 } from "discord.js";
 
 import { SlashCommandBuilder } from "@discordjs/builders";
-import jokes from "../../../data/jokes.json";
+import jokes from "../../../../jokes.json";
 import { onlineTimstamp } from "../../misc/utils";
 import packageJSON from "../../../package.json";
 
