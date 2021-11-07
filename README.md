@@ -9,7 +9,7 @@ Epic cool discord bot!
 -   V2 - Rewrite after making some other bots, this time using Discord-Akairo
 -   V3 - Rewrite using plain old Discord.js again so that I could add slash command support.
 
-## Self hosting
+## Running
 
 1. Clone this repo.
 2. Create a file named `.env` and fill it out with these values:
@@ -17,15 +17,14 @@ Epic cool discord bot!
 ```env
 DISCORD_TOKEN=123
 TOP_GG_TOKEN=456
-STATCORD_TOKEN=789
-HYPIXEL_TOKEN=101112
-TESTING_GUILD_ID=131415
+HYPIXEL_TOKEN=789
+TESTING_GUILD_ID=10112
 ```
 
 > Note that every value except for the Top.GG token and testing guild id is required.
 > If you don't know where to get the tokens, try to run the bot and it will tell you where to get the missing tokens.
 
-> If you supply a value for `TESTING_GUILD_ID` then slash commands will only be registered to that guild. If you don't provide a value for it, they'll be registered globally.
+> If you supply a value for `TESTING_GUILD_ID` then the bot is considered to be in development mode, and slash commands will only be registered to that guild. If you don't provide a value for it, they'll be registered globally.
 
 3. Install dependencies
 
