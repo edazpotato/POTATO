@@ -64,3 +64,7 @@ pnpm run start
 # Or with pm2
 pm2 start dist/src/sharder.js --name "POTATO V3.1"
 ```
+
+## FAQ
+**Where is the website code?**
+[Here](https://github.com/edazpotato/potato-website).
