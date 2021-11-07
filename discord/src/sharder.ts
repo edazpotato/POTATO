@@ -33,7 +33,11 @@ if (!TOKENS.HYPIXEL)
 const developmentMode = !!TOKENS.TESTING_GUILD_ID;
 
 const clusterCount = developmentMode ? 2 : undefined;
-const shardCount = developmentMode ? 2 : 4;
+const shardCount = developmentMode
+	? 2
+	: typeof process.env.SHARDS == undefined
+	? undefined
+	: Number(process.env.SHARDS);
 
 if (isPrimary) {
 	if (developmentMode) {
