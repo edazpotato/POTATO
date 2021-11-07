@@ -13,9 +13,10 @@ import {
 } from "discord.js";
 
 import { SlashCommandBuilder } from "@discordjs/builders";
-import jokes from "../../../../jokes.json";
 import { onlineTimstamp } from "../../misc/utils";
 import packageJSON from "../../../package.json";
+
+const jokes = require("../../../../../jokes.json"); // Fix typescript doing what it's supposed to
 
 const cluster = require("cluster");
 
