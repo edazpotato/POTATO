@@ -24,7 +24,7 @@ const slashCommands = new Collection<string, ApplicationCommandType>();
 slashCommands.set("help", {
 	discordData: new SlashCommandBuilder()
 		.setName("help")
-		.setDescription("Provides helpful information about POTATO."),
+		.setDescription("Provides helpful information about me."),
 	handler: async (interaction: Interaction) => {
 		if (!interaction.isCommand() || !interaction.isApplicationCommand())
 			return;
@@ -33,13 +33,17 @@ slashCommands.set("help", {
 				new MessageEmbed()
 					.setTitle("Help")
 					.setColor("RED")
+
 					.setDescription(
 						`To see a list of available commands, type a slash (\`/\`) into your Discord client's message box and click on my icon.
-
-Check out https://potato.edaz.codes for more infomation.
-My code is at https://github.com/edazpotato/POTATO.
+For more infomation about me, check out https://potato.edaz.codes.
+My code is publicaly available at https://github.com/edazpotato/POTATO.
 For support, join my discord server: https://discord.gg/mzR7eeZ.
-[Report a joke](https://github.com/edazpotato/POTATO/issues/new?assignees=edazpotato&labels=joke+report&template=joke-report.md&title=%5BJOKE-REPORT%5D+).`,
+Is a joke insensitive or offensive? Please report it [here](https://github.com/edazpotato/POTATO/issues/new?assignees=edazpotato&labels=joke+report&template=joke-report.md&title=%5BJOKE-REPORT%5D+).`,
+					)
+					.addField(
+						"Boring stuff",
+						`[Privacy policy](https://potato.edaz.codes/legal/privacy), [Terms of service](https://potato.edaz.codes/legal/terms).`,
 					),
 			],
 			ephemeral: true,
@@ -140,22 +144,23 @@ slashCommands.set("debug", {
 					// 					),
 					.addField(
 						"Metrics",
-						`I have \`${jokes.length}\` jokes,
-I've got \`${interaction.client.guilds.cache.size}\` guild${
+						`I have \`${jokes.length}\` jokes, I've got \`${
+							interaction.client.guilds.cache.size
+						}\` guild${
 							interaction.client.guilds.cache.size > 1 ? "s" : ""
-						} cached,
-and I came online <t:${Math.floor(onlineTimstamp / 1000)}:R>.`,
+						} cached, and I came online <t:${Math.floor(
+							onlineTimstamp / 1000,
+						)}:R>.`,
 					)
 					.addField(
 						"Package versions",
-						`I'm using Node.js version \`${process.version}\`,
-[\`discord.js\`](https://www.npmjs.com/package/discord.js) version \`${packageJSON.dependencies[
+						`I'm using Node.js version \`${
+							process.version
+						}\`, [\`discord.js\`](https://www.npmjs.com/package/discord.js) version \`${packageJSON.dependencies[
 							"discord.js"
-						].slice(1)}\`,
-[\`@discordjs/rest\`](https://www.npmjs.com/package/@discordjs/rest) version \`${packageJSON.dependencies[
-							"@discordjs/rest"
-						].slice(1)}\`,
-and [\`kurasuta\`](https://www.npmjs.com/package/kurasuta) version \`${packageJSON.dependencies[
+						].slice(
+							1,
+						)}\`, and [\`kurasuta\`](https://www.npmjs.com/package/kurasuta) version \`${packageJSON.dependencies[
 							"kurasuta"
 						].slice(1)}\`.`,
 					),

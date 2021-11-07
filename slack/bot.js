@@ -33,11 +33,11 @@ function getRandomJoke() {
 	return jokes[Math.floor(Math.random() * jokes.length)];
 }
 
-const allowedChannel = "C02LRGQKA73";
+const allowedChannel = process.env.ALLOWED_CHANNEL_ID;
 app.command("/joke", async (e) => {
 	await e.ack();
 	// console.log(e);
-	if (e.body.channel_id !== allowedChannel) {
+	if (allowedChannel && e.body.channel_id !== allowedChannel) {
 		await e.respond(`You can only do this in <#${allowedChannel}>.`);
 	} else {
 		const joke = getRandomJoke();
