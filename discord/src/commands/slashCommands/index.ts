@@ -229,7 +229,7 @@ slashCommands.set("deletemydata", {
 				new MessageEmbed()
 					.setColor("RED")
 					.setDescription(
-						"Are you sure that you want to request deletion all of the data that I have stored about you? Deleting stored user data will likely result in worse performance of my automoderation and antiraid systems.",
+						"Are you sure that you want to request deletion all of the data that I have stored about you? Deleting stored user data will likely result in worse performance of my automoderation and antiraid systems.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).",
 					)
 					.setFooter(
 						"Requesting stored user data deletion does not stop more data from being collected by me. To stop any more data from being collected, ask a guild admin to disable all data collection systems via the /settings command.",
@@ -310,24 +310,25 @@ slashCommands.set("settings", {
 				switch (interaction.options.getString("action")) {
 					case "status": {
 						const res = await db.get(
-							"SELECT logging_enabled, auto_moderation_enabled FROM guilds WHERE discord_id=$id",
+							"SELECT anti_raid_enabled, auto_moderation_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
 						if (!res)
 							return interaction.reply({
 								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**.",
+									"This guild doesn't seem to be in the database. That means that currently, **no messages are being parsed**.",
 								ephemeral: true,
 							});
 						const body = `Automoderation is **${
 							res["auto_moderation_enabled"] === 1
 								? "enabled"
 								: "disabled"
-						}** for this guild.`;
+						}** for this guild.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).`;
 						const footer =
-							res["logging_enabled"] === 1
-								? "This guild's messages are currently being logged."
-								: "This guild's messages are not being logged.";
+							res["anti_raid_enabled"] === 1 ||
+							res["auto_moderation_enabled"] === 1
+								? "I'm currently parsing this guild's messages."
+								: "I'm not parsing this guild's messages.";
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
@@ -346,21 +347,21 @@ slashCommands.set("settings", {
 								ephemeral: true,
 							});
 						let res: DatabaseResponseType = await db.get(
-							"SELECT logging_enabled, auto_moderation_enabled FROM guilds WHERE discord_id=$id",
+							"SELECT anti_raid_enabled, auto_moderation_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
 
 						// IF the guild isn't in the database yet add it otherwise update the existing reccord.
 						if (!res) {
 							await db.run(
-								"INSERT INTO guilds (discord_id, logging_enabled, auto_moderation_enabled, anti_raid_enabled) VALUES ($id, 1, 1, 0)",
+								"INSERT INTO guilds (discord_id, auto_moderation_enabled, anti_raid_enabled) VALUES ($id, 1, 0)",
 								{ $id: interaction.guild.id },
 							);
 						} else {
 							// If automoderation isn't already enabled
-							if (!res["auto_moderation_enabled"])
+							if (res["auto_moderation_enabled"] === 0)
 								await db.run(
-									"UPDATE guilds SET logging_enabled=1, auto_moderation_enabled=1 WHERE discord_id=$id",
+									"UPDATE guilds SET auto_moderation_enabled=1 WHERE discord_id=$id",
 									{ $id: interaction.guild.id },
 								);
 						}
@@ -371,17 +372,18 @@ slashCommands.set("settings", {
 									.setDescription(
 										`Automoderation ${
 											res &&
-											res["auto_moderation_enabled"]
+											res["auto_moderation_enabled"] === 1
 												? "was already"
 												: "is now"
-										} **enabled** for this guild.`,
+										} **enabled** for this guild.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).`,
 									)
 									.setFooter(
-										`This guild's messages are ${
-											res && res["logging_enabled"]
+										`I'm ${
+											res &&
+											res["anti_raid_enabled"] === 1
 												? ""
 												: "now"
-										} being logged.`,
+										} parsing this guild's messages.`,
 									),
 							],
 						});
@@ -395,31 +397,22 @@ slashCommands.set("settings", {
 							});
 
 						const res = await db.get(
-							"SELECT logging_enabled, auto_moderation_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
+							"SELECT anti_raid_enabled, auto_moderation_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
 						if (!res)
 							return interaction.reply({
 								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to use features that require message logging, a guild admin will need to enable them with the `/setting` command",
+									"This guild doesn't seem to be in the database. That means that currently, **no messages are being parsed**. If you want to use features that require message parsing, a guild admin will need to enable them with the `/setting` command",
 								ephemeral: true,
 							});
-						// If anti-raid is also disabled, then we can disable logging entirely
-						const should_logging_be_disabled =
-							res["anti_raid_enabled"] === 0;
+
 						// If it's currently enabled
-						if (res["auto_moderation_enabled"]) {
-							if (should_logging_be_disabled) {
-								await db.run(
-									"UPDATE guilds SET logging_enabled=0, auto_moderation_enabled=0 WHERE discord_id=$id",
-									{ $id: interaction.guild.id },
-								);
-							} else {
-								await db.run(
-									"UPDATE guilds SET auto_moderation_enabled=0 WHERE discord_id=$id",
-									{ $id: interaction.guild.id },
-								);
-							}
+						if (res["auto_moderation_enabled"] === 1) {
+							await db.run(
+								"UPDATE guilds SET auto_moderation_enabled=0 WHERE discord_id=$id",
+								{ $id: interaction.guild.id },
+							);
 						}
 						return interaction.reply({
 							embeds: [
@@ -427,15 +420,15 @@ slashCommands.set("settings", {
 									.setColor("RED")
 									.setDescription(
 										`Automoderation ${
-											res["auto_moderation_enabled"]
+											res["auto_moderation_enabled"] === 1
 												? "is now"
 												: "was already"
-										} **disabled** for this guild.`,
+										} **disabled** for this guild.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).`,
 									)
 									.setFooter(
-										should_logging_be_disabled
-											? "This guild's messages are no longer being logged."
-											: "This guild's messages are still being logged because antiraid is enabled.",
+										res["anti_raid_enabled"] === 1
+											? "I'm still parsing guild's messages because antiraid is enabled."
+											: "I'm no longer parsing this guild's messages.",
 									),
 							],
 						});
@@ -453,24 +446,25 @@ slashCommands.set("settings", {
 				switch (interaction.options.getString("action")) {
 					case "status": {
 						const res = await db.get(
-							"SELECT logging_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
+							"SELECT auto_moderation_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
 						if (!res)
 							return interaction.reply({
 								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**.",
+									"This guild doesn't seem to be in the database. That means that currently, **no messages are being parsed**.",
 								ephemeral: true,
 							});
 						const body = `Antiraid is **${
 							res["anti_raid_enabled"] === 1
 								? "enabled"
 								: "disabled"
-						}** for this guild.`;
+						}** for this guild.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).`;
 						const footer =
-							res["logging_enabled"] === 1
-								? "This guild's messages are currently being logged."
-								: "This guild's messages are not being logged.";
+							res["anti_raid_enabled"] === 1 ||
+							res["auto_moderation_enabled"] === 1
+								? "I'm currently parsing this guild's messages."
+								: "I'm not parsing this guild's messages.";
 						return interaction.reply({
 							embeds: [
 								new MessageEmbed()
@@ -489,20 +483,20 @@ slashCommands.set("settings", {
 								ephemeral: true,
 							});
 						const res: DatabaseResponseType = await db.get(
-							"SELECT logging_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
+							"SELECT auto_moderation_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
 						// IF the guild isn't in the database yet add it otherwise update the existing reccord.
 						if (!res) {
 							await db.run(
-								"INSERT INTO guilds (discord_id, logging_enabled, auto_moderation_enabled, anti_raid_enabled) VALUES ($id, 1, 0, 1)",
+								"INSERT INTO guilds (discord_id, auto_moderation_enabled, anti_raid_enabled) VALUES ($id, 0, 1)",
 								{ $id: interaction.guild.id },
 							);
 						} else {
 							// If antiraid isn't already enabled
-							if (!res["anti_raid_enabled"])
+							if (res["anti_raid_enabled"] === 0)
 								await db.run(
-									"UPDATE guilds SET logging_enabled=1, anti_raid_enabled=1 WHERE discord_id=$id",
+									"UPDATE guilds SET anti_raid_enabled=1 WHERE discord_id=$id",
 									{ $id: interaction.guild.id },
 								);
 						}
@@ -512,17 +506,19 @@ slashCommands.set("settings", {
 									.setColor("RED")
 									.setDescription(
 										`Antiraid ${
-											res && res["anti_raid_enabled"]
+											res &&
+											res["anti_raid_enabled"] === 1
 												? "was already"
 												: "is now"
-										} **enabled** for this guild.`,
+										} **enabled** for this guild.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).`,
 									)
 									.setFooter(
 										`This guild's messages are ${
-											res && res["logging_enabled"]
+											res &&
+											res["auto_moderation_enabled"] === 1
 												? ""
 												: "now"
-										} being logged.`,
+										} being parsed.`,
 									),
 							],
 						});
@@ -536,31 +532,22 @@ slashCommands.set("settings", {
 							});
 
 						const res = await db.get(
-							"SELECT logging_enabled, auto_moderation_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
+							"SELECT auto_moderation_enabled, anti_raid_enabled FROM guilds WHERE discord_id=$id",
 							{ $id: interaction.guild.id },
 						);
 						if (!res)
 							return interaction.reply({
 								content:
-									"This guild doesn't seem to be in the database. That means that currently, **no messages are being logged**. If you want to use features that require message logging, a guild admin will need to enable them with the `/setting` command.",
+									"This guild doesn't seem to be in the database. That means that currently, **no messages are being parsed**. If you want to use features that require message parsing, a guild admin will need to enable them with the `/setting` command.",
 								ephemeral: true,
 							});
-						// If anti-raid is also disabled, then we can disable logging entirely
-						const should_logging_be_disabled =
-							res["auto_moderation_enabled"] === 0;
+
 						// If it's currently enabled
-						if (res["anti_raid_enabled"]) {
-							if (should_logging_be_disabled) {
-								await db.run(
-									"UPDATE guilds SET logging_enabled=0, anti_raid_enabled=0 WHERE discord_id=$id",
-									{ $id: interaction.guild.id },
-								);
-							} else {
-								await db.run(
-									"UPDATE guilds SET anti_raid_enabled=0 WHERE discord_id=$id",
-									{ $id: interaction.guild.id },
-								);
-							}
+						if (res["anti_raid_enabled"] === 1) {
+							await db.run(
+								"UPDATE guilds SET anti_raid_enabled=0 WHERE discord_id=$id",
+								{ $id: interaction.guild.id },
+							);
 						}
 						return interaction.reply({
 							embeds: [
@@ -568,15 +555,15 @@ slashCommands.set("settings", {
 									.setColor("RED")
 									.setDescription(
 										`Antiraid ${
-											res["anti_raid_enabled"]
+											res["anti_raid_enabled"] === 1
 												? "is now"
 												: "was already"
-										} **disabled** for this guild.`,
+										} **disabled** for this guild.\n[Privacy policy](https://potato.edaz.codes/legal/privacy).`,
 									)
 									.setFooter(
-										should_logging_be_disabled
-											? "This guild's messages are no longer being logged."
-											: "This guild's messages are still being logged because automoderation is enabled.",
+										res["auto_moderation_enabled"] === 1
+											? "I'm still parsing guild's messages because automoderation is enabled."
+											: "I'm no longer parsing this guild's messages.",
 									),
 							],
 						});
