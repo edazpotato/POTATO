@@ -27,9 +27,8 @@ slashCommands.set("help", {
 		.setName("help")
 		.setDescription("Provides helpful information about me."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isCommand() || !interaction.isApplicationCommand())
-			return;
-		interaction.reply({
+		if (!interaction.isCommand()) return;
+		return interaction.reply({
 			embeds: [
 				new MessageEmbed()
 					.setTitle("Help")
@@ -56,7 +55,7 @@ slashCommands.set("joke", {
 		.setName("joke")
 		.setDescription("Sends funny joke."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		const joke = jokes[Math.floor(Math.random() * jokes.length)];
 		return interaction.reply({
 			content: joke,
@@ -68,7 +67,7 @@ slashCommands.set("oss", {
 		.setName("oss")
 		.setDescription("Provides a link to my source code."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		return interaction.reply({
 			content: "https://github.com/edazpotato/POTATO",
 			ephemeral: true,
@@ -80,7 +79,7 @@ slashCommands.set("ping", {
 		.setName("ping")
 		.setDescription("Provides latency information."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		return interaction.reply({
 			embeds: [
 				new MessageEmbed()
@@ -100,7 +99,7 @@ slashCommands.set("invite", {
 		.setName("invite")
 		.setDescription("Provides a link to add me to another Guild."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		return interaction.reply({
 			content:
 				"https://discord.com/api/oauth2/authorize?client_id=608921626548895755&permissions=537226240&scope=bot%20applications.commands",
@@ -113,7 +112,7 @@ slashCommands.set("debug", {
 		.setName("debug")
 		.setDescription("Provides information for debugging me."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		return interaction.reply({
 			embeds: [
 				new MessageEmbed()
@@ -175,7 +174,7 @@ slashCommands.set("vote", {
 		.setName("vote")
 		.setDescription("Provides a link to upvote me on Top.GG."),
 	handler: async (interaction: Interaction) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		return interaction.reply({
 			content: "https://top.gg/bot/608921626548895755/vote",
 			ephemeral: true,
@@ -190,7 +189,7 @@ slashCommands.set("deletemydata", {
 			"Request the deletion of your data or the data of a specified guild.",
 		),
 	handler: async (interaction, db) => {
-		if (!interaction.isApplicationCommand()) return;
+		if (!interaction.isCommand()) return;
 		if (interaction.inCachedGuild()) {
 			if (
 				!interaction.member.permissions.has(
