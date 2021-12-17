@@ -13,6 +13,7 @@ import {
 
 import { BaseCluster } from "kurasuta";
 import { Database } from "sqlite";
+import { Client as ElasticClient } from "@elastic/elasticsearch";
 import { Api as TopGGAPI } from "@top-gg/sdk";
 import { buttonHandlers } from "./messageComponentHandlers";
 import sqlite3 from "sqlite3";
@@ -20,6 +21,7 @@ import sqlite3 from "sqlite3";
 const cluster = require("cluster");
 
 const developmentMode = !!process.env.TESTING_GUILD_ID;
+const elasticClient = new ElasticClient({ node: "http://localhost:9200" });
 
 module.exports = class extends BaseCluster {
 	clusterID?: number = cluster.isWorker ? cluster.worker.id : undefined;
@@ -160,6 +162,26 @@ module.exports = class extends BaseCluster {
 									"Nothing seemed to happen for some reason.",
 								ephemeral: true,
 							});
+						}
+						try {
+							await elasticClient.index({
+								index: "slash-commands",
+								// type: '_doc', // uncomment this line if you are using {es} ≤ 6
+								body: {
+									name: interaction.commandName,
+									id: interaction.commandId,
+									options: interaction.options.resolved,
+								},
+							});
+						} catch (error: any) {
+							log(
+								"Error logging slash command to elasticsearch: " +
+									error,
+								{
+									shard: this.client.shard?.id,
+									cluster: this.clusterID,
+								},
+							);
 						}
 					} catch (error: any) {
 						log("Error handling slash command: " + error, {
