@@ -1,11 +1,10 @@
 import {
 	ContextMenuCommandBuilder,
 	SlashCommandBuilder,
-	SlashCommandSubcommandsOnlyBuilder,
 } from "@discordjs/builders";
+import { GuildMember, Interaction, Message } from "discord.js";
 
 import { Database } from "sqlite";
-import { Interaction } from "discord.js";
 import sqlite3 from "sqlite3";
 
 export type ApplicationCommandType = {
@@ -19,3 +18,8 @@ export type DatabaseType = Database<sqlite3.Database, sqlite3.Statement>;
 export type DatabaseResponseType =
 	| { [x: string]: string | number | null }
 	| undefined;
+
+export type EventHandlerType = {
+	event: "guildMemberAdd" | "messageCreate";
+	handler: (data: Message | GuildMember) => Promise<void>;
+};

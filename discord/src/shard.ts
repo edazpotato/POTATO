@@ -3,12 +3,16 @@
 
 import * as dotenv from "dotenv";
 
+import { Collection, Interaction } from "discord.js";
 import { log, missingEnvVarError, openDatabase } from "./misc/utils";
-import { messageCommands, slashCommands, userCommands } from "./commands";
+import {
+	messageCommands,
+	slashCommands,
+	userCommands,
+} from "./commandHandlers";
 
 import { BaseCluster } from "kurasuta";
 import { Database } from "sqlite";
-import { Interaction } from "discord.js";
 import { Api as TopGGAPI } from "@top-gg/sdk";
 import { buttonHandlers } from "./messageComponentHandlers";
 import sqlite3 from "sqlite3";
@@ -19,6 +23,9 @@ const developmentMode = !!process.env.TESTING_GUILD_ID;
 
 module.exports = class extends BaseCluster {
 	clusterID?: number = cluster.isWorker ? cluster.worker.id : undefined;
+	antiraid = { cache: new Collection() };
+	automod = { cache: new Collection() };
+
 	launch() {
 		log(`Launching`, {
 			shard: this.client.shard?.id,
@@ -206,6 +213,20 @@ module.exports = class extends BaseCluster {
 				}
 			},
 		);
+
+		this.client.on("messageCreate", async (message) => {
+			if (message.author.id === this.client.user?.id) return;
+
+			// Antiraid system here
+
+			// Automoderation system here
+		});
+
+		this.client.on("guildMemberAdd", async (member) => {
+			if (member.id === this.client.user?.id) return;
+
+			// Antiraid system here
+		});
 
 		log("Registered listeners", {
 			shard: this.client.shard?.id,
