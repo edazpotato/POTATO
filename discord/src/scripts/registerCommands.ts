@@ -12,7 +12,7 @@ import {
 	messageCommands,
 	slashCommands,
 	userCommands,
-} from "../commands/index";
+} from "../commandHandlers/index";
 
 import { Collection } from "discord.js";
 import { REST } from "@discordjs/rest";
